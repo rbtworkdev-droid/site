@@ -32,6 +32,49 @@ document.querySelectorAll('.skill-card, .project-card').forEach(el => {
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
 });
+
+// Лёгкое движение аватара в сторону, противоположную курсору
+const hero = document.querySelector('.hero');
+const heroAvatar = document.querySelector('.hero-avatar');
+
+if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const maxShift = 10;
+    let targetX = 0;
+    let targetY = 0;
+    let shiftX = 0;
+    let shiftY = 0;
+    const followEase = 0.045;
+    let animationFrame;
+
+    const animateAvatar = () => {
+        shiftX += (targetX - shiftX) * followEase;
+        shiftY += (targetY - shiftY) * followEase;
+        heroAvatar.style.transform = `translate3d(${shiftX.toFixed(2)}px, ${shiftY.toFixed(2)}px, 0)`;
+
+        if (Math.abs(targetX - shiftX) > 0.01 || Math.abs(targetY - shiftY) > 0.01) {
+            animationFrame = requestAnimationFrame(animateAvatar);
+        } else {
+            animationFrame = 0;
+        }
+    };
+
+    hero.addEventListener('pointermove', event => {
+        const bounds = hero.getBoundingClientRect();
+        const relativeX = (event.clientX - bounds.left) / bounds.width - 0.5;
+        const relativeY = (event.clientY - bounds.top) / bounds.height - 0.5;
+
+        targetX = -relativeX * maxShift;
+        targetY = -relativeY * maxShift;
+
+        if (!animationFrame) animationFrame = requestAnimationFrame(animateAvatar);
+    });
+
+    hero.addEventListener('pointerleave', () => {
+        targetX = 0;
+        targetY = 0;
+        if (!animationFrame) animationFrame = requestAnimationFrame(animateAvatar);
+    });
+}
 /* ==========================================================
    Динамический BPMN-фон на canvas
    Аккуратная «живая» схема: пулы, задачи, шлюзы, события,
