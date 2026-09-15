@@ -32,3 +32,381 @@ document.querySelectorAll('.skill-card, .project-card').forEach(el => {
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
 });
+/* ==========================================================
+   Динамический BPMN-фон на canvas
+   Аккуратная «живая» схема: пулы, задачи, шлюзы, события,
+   мягкие пунктирные потоки. Гармонирует с тёплой палитрой.
+   ========================================================== */
+(function () {
+    const canvas = document.getElementById('bpmn-bg');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
+    let W = 0, H = 0, DPR = 1;
+    let backgroundGradient;
+    let animationId = 0;
+    let lastFrame = 0;
+    const frameInterval = 1000 / 30;
+
+    // Палитра — тянем из CSS-переменных
+    const css = getComputedStyle(document.documentElement);
+    const COL = {
+        line:   css.getPropertyValue('--accent').trim()      || '#c78b4a',
+        soft:   css.getPropertyValue('--accent-2').trim()    || '#e8c9a0',
+        border: css.getPropertyValue('--border').trim()      || '#4a3424',
+        muted:  css.getPropertyValue('--text-muted').trim()  || '#b89f84',
+    };
+
+    const rand  = (min, max) => Math.random() * (max - min) + min;
+    const randI = (min, max) => Math.floor(rand(min, max + 1));
+    const pick  = arr => arr[(Math.random() * arr.length) | 0];
+
+    /* ---------- Утилиты ---------- */
+
+    // Скруглённый прямоугольник
+    function roundRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y,     x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x,     y + h, r);
+        ctx.arcTo(x,     y + h, x,     y,     r);
+        ctx.arcTo(x,     y,     x + w, y,     r);
+        ctx.closePath();
+    }
+
+    /* ---------- Генерация сцены ---------- */
+    /*
+       Сцена — это несколько «дорожек» (streams). Внутри каждой
+       цепочка BPMN-фигур, соединённых потоками. Дорожки медленно
+       плывут вверх/вниз и по горизонтали, «дышат» по яркости.
+    */
+
+    let streams = [];
+
+    function makeNode(kind) {
+        // kind: 'event' | 'task' | 'gateway' | 'event-end'
+        switch (kind) {
+            case 'event':
+                return { kind, w: 26, h: 26 };
+            case 'event-end':
+                return { kind, w: 30, h: 30 };
+            case 'task':
+                return { kind, w: rand(74, 118), h: rand(44, 56) };
+            case 'gateway':
+                return { kind, w: 42, h: 42 };
+        }
+    }
+
+    // Последовательность фигур внутри дорожки
+    function buildNodeSequence() {
+        const seq = [];
+        seq.push(makeNode('event'));                        // старт
+        const middleCount = randI(5, 8);
+        let lastWasGateway = false;
+        for (let i = 0; i < middleCount; i++) {
+            // после шлюза ставим задачу, чтобы не было двух шлюзов подряд
+            if (lastWasGateway || Math.random() < 0.58) {
+                seq.push(makeNode('task'));
+                lastWasGateway = false;
+            } else {
+                seq.push(makeNode('gateway'));
+                lastWasGateway = true;
+            }
+        }
+        seq.push(makeNode('event-end'));                    // конец
+        return seq;
+    }
+
+    function makeStream(initial) {
+        const nodes = buildNodeSequence();
+        const gap = rand(34, 58);
+        const dirRight = Math.random() < 0.5;                // направление потока
+
+        // суммарная ширина дорожки
+        let totalW = 0;
+        nodes.forEach(n => totalW += n.w);
+        totalW += gap * (nodes.length - 1);
+
+        // разместим элементы вдоль оси X
+        let cursor = 0;
+        const placed = nodes.map((n, i) => {
+            const node = {
+                ...n,
+                x: cursor + n.w / 2,
+                y: 0,
+                phase: Math.random() * Math.PI * 2,
+                delay: i * 0.35,        // для «проявления» потока
+            };
+            cursor += n.w + gap;
+            return node;
+        });
+
+        if (!dirRight) {
+            // отзеркаливаем по X
+            placed.forEach(n => { n.x = totalW - n.x; });
+        }
+
+        // связи между соседними узлами
+        const links = [];
+        for (let i = 0; i < placed.length - 1; i++) {
+            links.push({ from: i, to: i + 1, life: 0, target: 1 });
+        }
+
+        // начальная позиция дорожки
+        const startY = initial ? rand(H * 0.1, H * 0.9) : rand(-H * 0.2, H * 1.2);
+        const startX = rand(-totalW * 0.15, W - totalW * 0.85);
+
+        return {
+            nodes: placed,
+            links,
+            totalW,
+            x: startX,
+            y: startY,
+            vx: rand(-0.06, 0.06),
+            vy: rand(-0.05, 0.05),
+            alpha: rand(0.16, 0.27),                            // общая прозрачность
+            scale: rand(0.82, 1.08),
+            phase: Math.random() * Math.PI * 2,
+            breatheSpeed: rand(0.25, 0.45),
+            // плавное «дыхание» положения
+            swayAmpX: rand(6, 16),
+            swayAmpY: rand(4, 10),
+            swaySpeed: rand(0.2, 0.35),
+        };
+    }
+
+    function buildScene() {
+        // Больше дорожек и узлов создают плотный слой схемы на фоне.
+        const density = (W * H) / 170000;
+        const count = Math.max(5, Math.min(10, Math.round(density)));
+        streams = Array.from({ length: count }, () => makeStream(true));
+    }
+
+    /* ---------- Отрисовка ---------- */
+
+    function drawEventNode(n, isStart) {
+        const r = n.w / 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.stroke();
+        // внутреннее кольцо — деликатное
+        ctx.globalAlpha *= 0.55;
+        ctx.beginPath();
+        ctx.arc(0, 0, r * (isStart ? 0.68 : 0.78), 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha /= 0.55;
+    }
+
+    function drawTaskNode(n) {
+        roundRect(-n.w / 2, -n.h / 2, n.w, n.h, 8);
+        ctx.stroke();
+        // две «строки текста» внутри задачи
+        ctx.globalAlpha *= 0.45;
+        const pad = 10;
+        ctx.beginPath();
+        ctx.moveTo(-n.w / 2 + pad, -3);
+        ctx.lineTo( n.w / 2 - pad, -3);
+        ctx.moveTo(-n.w / 2 + pad,  8);
+        ctx.lineTo( n.w / 2 - pad * 2.2, 8);
+        ctx.stroke();
+        ctx.globalAlpha /= 0.45;
+    }
+
+    function drawGatewayNode(n) {
+        const s = n.w / 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -s);
+        ctx.lineTo(s, 0);
+        ctx.lineTo(0, s);
+        ctx.lineTo(-s, 0);
+        ctx.closePath();
+        ctx.stroke();
+        // маркер исключающего шлюза — «X»
+        ctx.globalAlpha *= 0.5;
+        const k = s * 0.32;
+        ctx.beginPath();
+        ctx.moveTo(-k, -k); ctx.lineTo(k, k);
+        ctx.moveTo( k, -k); ctx.lineTo(-k, k);
+        ctx.stroke();
+        ctx.globalAlpha /= 0.5;
+    }
+
+    // Рисуем пунктирный поток между двумя точками с постепенным проявлением
+    function drawFlow(x1, y1, x2, y2, progress) {
+        // обрезаем линию по progress — поток «течёт» от from к to
+        const px = x1 + (x2 - x1) * progress;
+        const py = y1 + (y2 - y1) * progress;
+
+        ctx.save();
+        ctx.setLineDash([6, 6]);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(px, py);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // стрелка у «головы» потока
+        if (progress > 0.15) {
+            const ang = Math.atan2(y2 - y1, x2 - x1);
+            const ah = 7;
+            const hx = px, hy = py;
+            ctx.beginPath();
+            ctx.moveTo(hx, hy);
+            ctx.lineTo(hx - ah * Math.cos(ang - 0.45), hy - ah * Math.sin(ang - 0.45));
+            ctx.moveTo(hx, hy);
+            ctx.lineTo(hx - ah * Math.cos(ang + 0.45), hy - ah * Math.sin(ang + 0.45));
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    /* ---------- Цикл ---------- */
+
+    let last = performance.now();
+    let t = 0;
+    let animate = true;
+
+    function frame(now) {
+        if (lastFrame && now - lastFrame < frameInterval) {
+            animationId = requestAnimationFrame(frame);
+            return;
+        }
+        lastFrame = now;
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+        t += dt;
+
+        ctx.clearRect(0, 0, W, H);
+
+        // Тёплый радиальный градиент — «дыхание» фона
+        ctx.fillStyle = backgroundGradient;
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.lineJoin = 'round';
+        ctx.lineCap  = 'round';
+
+        for (const s of streams) {
+            // мягкое смещение и дрейф всей дорожки
+            s.x += s.vx * 60 * dt;
+            s.y += s.vy * 60 * dt;
+
+            // «дыхание» положения
+            const swayX = Math.sin(t * s.swaySpeed + s.phase) * s.swayAmpX;
+            const swayY = Math.cos(t * s.swaySpeed * 1.3 + s.phase) * s.swayAmpY;
+
+            // если дорожка ушла слишком далеко — заворачиваем
+            if (s.x - s.totalW * 0.5 > W + 120) s.x = -s.totalW * 0.5 - 120;
+            if (s.x + s.totalW * 0.5 < -120)    s.x = W + s.totalW * 0.5 + 120;
+            if (s.y - 100 > H + 100)            s.y = -100 - 40;
+            if (s.y + 100 < -100)               s.y = H + 140;
+
+            const breathe = 1 + Math.sin(t * s.breatheSpeed + s.phase) * 0.05;
+
+            ctx.save();
+            ctx.translate(s.x + swayX, s.y + swayY);
+            ctx.scale(s.scale * breathe, s.scale * breathe);
+
+            // Сначала — потоки (под фигурами)
+            ctx.strokeStyle = COL.soft;
+            ctx.lineWidth = 1.3;
+            ctx.setLineDash([6, 6]);
+            for (const link of s.links) {
+                const a = s.nodes[link.from];
+                const b = s.nodes[link.to];
+
+                // анимация проявления потока
+                link.life += dt * 0.35;
+                if (link.life > 1) link.life = 0; // цикл: поток «пробегает» заново
+
+                const progress = Math.min(1, link.life);
+                ctx.globalAlpha = s.alpha * 1.15 * Math.min(1, link.life * 2);
+                drawFlow(a.x, a.y, b.x, b.y, progress);
+            }
+            ctx.setLineDash([]);
+
+            // Затем — узлы
+            for (const n of s.nodes) {
+                ctx.save();
+                ctx.translate(n.x, n.y);
+
+                // пульсация размера — очень деликатная
+                const pulse = 1 + Math.sin(t * 0.8 + n.phase) * 0.025;
+                ctx.scale(pulse, pulse);
+
+                ctx.globalAlpha = Math.min(0.36, s.alpha * 1.18);
+                ctx.strokeStyle = COL.line;
+                ctx.lineWidth = 1.8;
+
+                // Свечение через яркую линию дешевле, чем shadowBlur на каждом узле.
+                ctx.shadowBlur = 0;
+
+                switch (n.kind) {
+                    case 'event':
+                        drawEventNode(n, true);
+                        break;
+                    case 'event-end':
+                        drawEventNode(n, false);
+                        break;
+                    case 'task':
+                        drawTaskNode(n);
+                        break;
+                    case 'gateway':
+                        drawGatewayNode(n);
+                        break;
+                }
+                ctx.restore();
+            }
+
+            ctx.restore();
+        }
+
+        if (animate) animationId = requestAnimationFrame(frame);
+    }
+
+    /* ---------- Resize / init ---------- */
+
+    function resize() {
+        DPR = Math.min(1.5, window.devicePixelRatio || 1);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width  = W * DPR;
+        canvas.height = H * DPR;
+        canvas.style.width  = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        const cx = W * 0.35, cy = H * 0.4;
+        backgroundGradient = ctx.createRadialGradient(
+            cx, cy, 0,
+            cx, cy, Math.max(W, H) * 0.85
+        );
+        backgroundGradient.addColorStop(0, 'rgba(199, 139, 74, 0.10)');
+        backgroundGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        buildScene();
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 220);
+    });
+
+    // Пауза, когда вкладка неактивна
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            cancelAnimationFrame(animationId);
+            animationId = 0;
+        } else {
+            last = performance.now();
+            lastFrame = 0;
+            if (animate && !animationId) animationId = requestAnimationFrame(frame);
+        }
+    });
+
+    resize();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        animate = false;
+        frame(performance.now());
+    } else {
+        animationId = requestAnimationFrame(frame);
+    }
+})();

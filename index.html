@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Андрей Ежов — Бизнес-аналитик</title>
+    <title>Андрей Ежов — Аналитик/Внедренец</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+      <canvas id="bpmn-bg" aria-hidden="true"></canvas>
     <header class="header">
         <nav class="nav container">
             <a href="#" class="logo">Портфолио<span>вайбкодом</span></a>
@@ -35,11 +36,11 @@
                     <a class="hero-resume-link" href="https://spb.hh.ru/resume/7fce27c6ff0e0b1d760039ed1f6f4542306c43" target="_blank" rel="noopener noreferrer">Моё резюме на hh.ru</a>
                 </div>
                 <p class="hero-desc">
-                    Помогаю бизнесу принимать решения на основе данных. 
-                    Превращаю хаос в структурированные требования и понятные метрики.
+                    Опыт в продажах, разработке, бизнес-анализе и проектирование. Знание документации, методологий и инструментов для работы в этой сфере.
                 </p>
                 <div class="hero-buttons">
                     <a href="#projects" class="btn btn-primary">Мои кейсы</a>
+                    <a href="https://disk.yandex.ru/i/kQmrvUrLYQO_6Q" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Компетенции Excel</a>
                     <a href="#contact" class="btn btn-outline">Связаться</a>
                 </div>
             </div>
@@ -54,13 +55,26 @@
         <div class="container">
             <h2 class="section-title">Обо мне</h2>
             <div class="about-content">
-                <p>
-                    Я бизнес-аналитик с опытом выявления потребностей заказчика, 
-                    формализации требований и оптимизации бизнес-процессов. 
-                    Работаю на стыке бизнеса и IT: перевожу задачи компании 
-                    на язык разработчиков, помогаю избегать лишних затрат и 
-                    повышать эффективность продукта.
-                </p>
+Сертификаты Битрикс24:<br>
+- Битрикс24.CRM<br>
+- No-code Битрикс24<br>
+- Автоматизация цифровых рабочих мест<br>
+- 1С Коннектор<br>
+- Аналитик Б24<br>
+<br>
+Мои ожидания от команды:<br>
+- Проактивные и открытые к общению люди<br>
+- Хотят быстро развиваться и расти<br>
+- Готовы поддерживать и помогать друг другу<br>
+- Используют или учатся пользоваться AI-инструментами<br>
+- Есть чёткие понятные цели и общий план развития<br>
+<br>
+Мой стек для комфортной работы:<br>
+- Для трекинга задач, совместной работы - Б24<br>
+- Для ведения проектов/встреч с клиентами - obsidian<br>
+- Для описания процессов - draw io через VS code <br> (для массового редактирования BPMN в крупных процессах)<br>
+                </br>               
+</p>
             </div>
         </div>
     </section>
@@ -70,28 +84,28 @@
             <h2 class="section-title">Компетенции</h2>
             <div class="skills-grid">
                 <div class="skill-card">
-                    <h3>Сбор требований</h3>
-                    <p>Интервью, опросы, анализ документов, User Story</p>
+                    <h3>Presale</h3>
+                    <p>Знакомство, демонстрация функционала, КП с оценкой</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Моделирование</h3>
-                    <p>BPMN, UML, IDEF0, описание бизнес-процессов</p>
+                    <h3>Аналитика</h3>
+                    <p>Встречи, формализация ТЗ, доработка и защита</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Аналитика данных</h3>
-                    <p>SQL, Excel, Google Sheets, визуализация данных</p>
+                    <h3>Внедрение</h3>
+                    <p>Реализация ТЗ, проектное управление командой</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Инструменты</h3>
-                    <p>Jira, Confluence, Miro, MS Visio, Figma</p>
+                    <h3>Обучение</h3>
+                    <p>Создание документации и обучение сотрудников</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Методологии</h3>
-                    <p>Agile, Scrum, Kanban, Waterfall</p>
+                    <h3>Сопровождение</h3>
+                    <p>Общение в чатах, поддержание связи с сотрудниками</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Документация</h3>
-                    <p>ТЗ, BRD, SRS, функциональные спецификации</p>
+                    <h3>Допродажа</h3>
+                    <p>Доработки после внедрения, кастомные решения</p>
                 </div>
             </div>
         </div>
@@ -102,38 +116,43 @@
             <h2 class="section-title">Кейсы</h2>
             <div class="projects-grid">
                 <article class="project-card">
-                    <div class="project-image" style="background: linear-gradient(135deg, #4a2c1a, #a67c52);"></div>
+                     <span class="project-hours">300ч+</span>
+                    <div class="project-image">
+    <img src="beton.jpeg" alt="Производитель бетона" loading="lazy">
+</div>
                     <div class="project-info">
-                        <h3>Оптимизация CRM</h3>
-                        <p>Анализ текущих процессов продаж, выявление узких мест и формирование требований к доработке CRM.</p>
+                        <h3>Производитель бетона</h3>
+                        <p>Стандартная организация работы отдела продаж, разработка объёмных бизнес-процессов на согласования документов, кастомизация портала. Автоматизация документаоборота. Онлайн-запись аренды оборудования.</p>
                         <div class="project-tags">
-                            <span>BPMN</span><span>SQL</span><span>Jira</span>
+                            
+                            <span>B2B</span><span>Бизнес-процессы</span><span>Документооборот</span><span>Онлайн-запись</span>
                         </div>
-                        <a href="#" class="project-link">Смотреть кейс →</a>
                     </div>
                 </article>
 
                 <article class="project-card">
-                    <div class="project-image" style="background: linear-gradient(135deg, #8b5a2b, #d4a373);"></div>
+                     <span class="project-hours">120ч</span>
+                <div class="project-image">
+    <img src="uhasstok.jpg" alt="Производитель бетона" loading="lazy">
+</div>
                     <div class="project-info">
-                        <h3>Дашборд для отдела маркетинга</h3>
-                        <p>Сбор требований к метрикам, проектирование интерактивного дашборда для мониторинга рекламных кампаний.</p>
+                        <h3>Застройщик частных участков</h3>
+                        <p>Анализ рабочих процессов проектной группы. Автоматизация постановки и контроля за сроками задач. Разработка BI отчётов на конструкторе с использованием SQL для отслеживания источников трафика по регионам.</p>
                         <div class="project-tags">
-                            <span>Tableau</span><span>Excel</span><span>KPI</span>
+                           <span>B2C</span> <span>Проеты & задачи</span><span>Маркетинг</span><span>Автоматизация рабочих циклов</span>
                         </div>
-                        <a href="#" class="project-link">Смотреть кейс →</a>
                     </div>
                 </article>
-
                 <article class="project-card">
-                    <div class="project-image" style="background: linear-gradient(135deg, #c78b4a, #e8c9a0);"></div>
-                    <div class="project-info">
-                        <h3>Автоматизация отчетности</h3>
-                        <p>Анализ ручных операций, разработка ТЗ на автоматизацию и внедрение системы отчетности.</p>
+                     <span class="project-hours">250ч+</span>
+                     <div class="project-image">
+    <img src="zakup.jpg" alt="Производитель бетона" loading="lazy">
+</div> <div class="project-info">
+                        <h3>Отдел закупок</h3>
+                        <p>Автоматизация рутины, создание системы учёта компаний-посредников, разработка процессов конкурсов и системы рейтинга. Оценка эффективности работы с разными посредниками. Автоматические сценарии под нужны отдела продаж. Синхронизация с 1C:ERP.</p>
                         <div class="project-tags">
-                            <span>UML</span><span>Confluence</span>
+                            <span>Отдел закупок</span><span>Бизнес-процессы</span><span>Складской учёт</span><span>1C</span><span>Метрики</span>
                         </div>
-                        <a href="#" class="project-link">Смотреть кейс →</a>
                     </div>
                 </article>
             </div>
@@ -143,11 +162,11 @@
     <section id="contact" class="section section-alt">
         <div class="container">
             <h2 class="section-title">Контакты</h2>
-            <p class="contact-text">Открыт к предложениям о сотрудничестве и интересным проектам.</p>
+            <p class="contact-text">Не всегда могу отвечать на звонки в течение дня, поэтому пишите в чате <a  class="hero-resume-link" href="https://spb.hh.ru/resume/7fce27c6ff0e0b1d760039ed1f6f4542306c43" target="_blank" rel="noopener noreferrer">hh.ru</a> или телеграмме</p>
             <div class="contact-links">
-                <a href="mailto:ivan@example.com" class="contact-link">📧 ivan@example.com</a>
-                <a href="https://github.com/" target="_blank" class="contact-link">🐙 GitHub</a>
-                <a href="https://t.me/" target="_blank" class="contact-link">✈️ Telegram</a>
+                <a href="mailto:rbtwork.dev@yandx.ru" class="contact-link">📧 rbtwork.dev@yandx.ru</a>
+                <a href="tel:+79213924714" class="contact-link">📞 +79213924714</a>
+                <a href="https://t.me/Andrey_UPT" target="_blank" class="contact-link">✈️ Telegram</a>
             </div>
         </div>
     </section>
