@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Иван Иванов — Портфолио</title>
+    <title>Андрей Ежов — Бизнес-аналитик</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,11 +12,11 @@
 <body>
     <header class="header">
         <nav class="nav container">
-            <a href="#" class="logo">Иван<span>.</span></a>
+            <a href="#" class="logo">Портфолио<span>вайбкодом</span></a>
             <ul class="nav-links">
                 <li><a href="#about">Обо мне</a></li>
-                <li><a href="#skills">Навыки</a></li>
-                <li><a href="#projects">Проекты</a></li>
+                <li><a href="#skills">Компетенции</a></li>
+                <li><a href="#projects">Кейсы</a></li>
                 <li><a href="#contact">Контакты</a></li>
             </ul>
             <button class="burger" aria-label="Меню">
@@ -29,19 +29,23 @@
         <div class="container hero-content">
             <div class="hero-text">
                 <p class="hero-greeting">Привет, меня зовут</p>
-                <h1>Иван Иванов</h1>
-                <p class="hero-role">Frontend-разработчик</p>
+                <h1>Андрей Ежов</h1>
+                <div class="hero-role-row">
+                    <p class="hero-role">Аналитик/Внедренец</p>
+                    <a class="hero-resume-link" href="https://spb.hh.ru/resume/7fce27c6ff0e0b1d760039ed1f6f4542306c43" target="_blank" rel="noopener noreferrer">Моё резюме на hh.ru</a>
+                </div>
                 <p class="hero-desc">
-                    Создаю современные и удобные веб-интерфейсы.
-                    Люблю чистый код и продуманный дизайн.
+                    Помогаю бизнесу принимать решения на основе данных. 
+                    Превращаю хаос в структурированные требования и понятные метрики.
                 </p>
                 <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">Мои проекты</a>
+                    <a href="#projects" class="btn btn-primary">Мои кейсы</a>
                     <a href="#contact" class="btn btn-outline">Связаться</a>
                 </div>
             </div>
-            <div class="hero-avatar">
-                <div class="avatar-circle">ИИ</div>
+           <div class="hero-avatar">
+    <img src="photo_2025-03-20_21-56-57.jpg" alt="Андрей Ежов" class="avatar-img">
+</div>
             </div>
         </div>
     </section>
@@ -51,10 +55,11 @@
             <h2 class="section-title">Обо мне</h2>
             <div class="about-content">
                 <p>
-                    Я начинающий веб-разработчик с опытом создания адаптивных
-                    и производительных сайтов. Работаю с HTML, CSS, JavaScript
-                    и современными фреймворками. Постоянно учусь новому и
-                    применяю знания в реальных проектах.
+                    Я бизнес-аналитик с опытом выявления потребностей заказчика, 
+                    формализации требований и оптимизации бизнес-процессов. 
+                    Работаю на стыке бизнеса и IT: перевожу задачи компании 
+                    на язык разработчиков, помогаю избегать лишних затрат и 
+                    повышать эффективность продукта.
                 </p>
             </div>
         </div>
@@ -62,31 +67,31 @@
 
     <section id="skills" class="section section-alt">
         <div class="container">
-            <h2 class="section-title">Навыки</h2>
+            <h2 class="section-title">Компетенции</h2>
             <div class="skills-grid">
                 <div class="skill-card">
-                    <h3>HTML5</h3>
-                    <p>Семантическая разметка, доступность</p>
+                    <h3>Сбор требований</h3>
+                    <p>Интервью, опросы, анализ документов, User Story</p>
                 </div>
                 <div class="skill-card">
-                    <h3>CSS3</h3>
-                    <p>Flexbox, Grid, анимации, адаптивность</p>
+                    <h3>Моделирование</h3>
+                    <p>BPMN, UML, IDEF0, описание бизнес-процессов</p>
                 </div>
                 <div class="skill-card">
-                    <h3>JavaScript</h3>
-                    <p>ES6+, DOM, асинхронность, fetch API</p>
+                    <h3>Аналитика данных</h3>
+                    <p>SQL, Excel, Google Sheets, визуализация данных</p>
                 </div>
                 <div class="skill-card">
-                    <h3>React</h3>
-                    <p>Компоненты, хуки, роутинг</p>
+                    <h3>Инструменты</h3>
+                    <p>Jira, Confluence, Miro, MS Visio, Figma</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Git</h3>
-                    <p>Ветвление, коммиты, pull requests</p>
+                    <h3>Методологии</h3>
+                    <p>Agile, Scrum, Kanban, Waterfall</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Figma</h3>
-                    <p>Вёрстка по макетам, работа с дизайном</p>
+                    <h3>Документация</h3>
+                    <p>ТЗ, BRD, SRS, функциональные спецификации</p>
                 </div>
             </div>
         </div>
@@ -94,41 +99,41 @@
 
     <section id="projects" class="section">
         <div class="container">
-            <h2 class="section-title">Проекты</h2>
+            <h2 class="section-title">Кейсы</h2>
             <div class="projects-grid">
                 <article class="project-card">
-                    <div class="project-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                    <div class="project-image" style="background: linear-gradient(135deg, #4a2c1a, #a67c52);"></div>
                     <div class="project-info">
-                        <h3>Todo-приложение</h3>
-                        <p>Приложение для управления задачами с сохранением в localStorage.</p>
+                        <h3>Оптимизация CRM</h3>
+                        <p>Анализ текущих процессов продаж, выявление узких мест и формирование требований к доработке CRM.</p>
                         <div class="project-tags">
-                            <span>HTML</span><span>CSS</span><span>JS</span>
+                            <span>BPMN</span><span>SQL</span><span>Jira</span>
                         </div>
-                        <a href="#" class="project-link">Посмотреть →</a>
+                        <a href="#" class="project-link">Смотреть кейс →</a>
                     </div>
                 </article>
 
                 <article class="project-card">
-                    <div class="project-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+                    <div class="project-image" style="background: linear-gradient(135deg, #8b5a2b, #d4a373);"></div>
                     <div class="project-info">
-                        <h3>Погодное приложение</h3>
-                        <p>Показывает текущую погоду по данным OpenWeather API.</p>
+                        <h3>Дашборд для отдела маркетинга</h3>
+                        <p>Сбор требований к метрикам, проектирование интерактивного дашборда для мониторинга рекламных кампаний.</p>
                         <div class="project-tags">
-                            <span>JS</span><span>API</span><span>CSS</span>
+                            <span>Tableau</span><span>Excel</span><span>KPI</span>
                         </div>
-                        <a href="#" class="project-link">Посмотреть →</a>
+                        <a href="#" class="project-link">Смотреть кейс →</a>
                     </div>
                 </article>
 
                 <article class="project-card">
-                    <div class="project-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+                    <div class="project-image" style="background: linear-gradient(135deg, #c78b4a, #e8c9a0);"></div>
                     <div class="project-info">
-                        <h3>Лендинг для стартапа</h3>
-                        <p>Адаптивный лендинг с анимациями и формой обратной связи.</p>
+                        <h3>Автоматизация отчетности</h3>
+                        <p>Анализ ручных операций, разработка ТЗ на автоматизацию и внедрение системы отчетности.</p>
                         <div class="project-tags">
-                            <span>HTML</span><span>CSS</span>
+                            <span>UML</span><span>Confluence</span>
                         </div>
-                        <a href="#" class="project-link">Посмотреть →</a>
+                        <a href="#" class="project-link">Смотреть кейс →</a>
                     </div>
                 </article>
             </div>
@@ -138,7 +143,7 @@
     <section id="contact" class="section section-alt">
         <div class="container">
             <h2 class="section-title">Контакты</h2>
-            <p class="contact-text">Хотите обсудить проект или просто поздороваться? Пишите!</p>
+            <p class="contact-text">Открыт к предложениям о сотрудничестве и интересным проектам.</p>
             <div class="contact-links">
                 <a href="mailto:ivan@example.com" class="contact-link">📧 ivan@example.com</a>
                 <a href="https://github.com/" target="_blank" class="contact-link">🐙 GitHub</a>
@@ -149,7 +154,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>© <span id="year"></span> Иван Иванов. Сделано с ❤️</p>
+            <p>© <span id="year"></span> Андрей Ежов</p>
         </div>
     </footer>
 

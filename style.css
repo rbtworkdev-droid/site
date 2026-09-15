@@ -5,14 +5,15 @@
 }
 
 :root {
-    --bg: #0f0f14;
-    --bg-alt: #16161d;
-    --text: #e6e6e6;
-    --text-muted: #9a9aa5;
-    --accent: #667eea;
-    --accent-2: #764ba2;
-    --card: #1c1c24;
-    --border: #2a2a34;
+    /* Цветовая гамма, взятая с аватара: теплые, глубокие тона */
+    --bg: #1a120b;          /* Очень темный шоколадный */
+    --bg-alt: #261a12;      /* Чуть светлее для секций */
+    --text: #f5e6d3;        /* Теплый бежевый (цвет света на коже) */
+    --text-muted: #b89f84;  /* Приглушенный бежевый */
+    --accent: #c78b4a;      /* Золотисто-коричневый (основной акцент) */
+    --accent-2: #e8c9a0;    /* Светлый песочный */
+    --card: #2e1f15;        /* Фон карточек */
+    --border: #4a3424;      /* Границы */
 }
 
 html {
@@ -36,7 +37,7 @@ body {
 .header {
     position: sticky;
     top: 0;
-    background: rgba(15, 15, 20, 0.85);
+    background: rgba(26, 18, 11, 0.85);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     z-index: 100;
@@ -116,7 +117,7 @@ body {
     font-size: clamp(2.2rem, 5vw, 3.5rem);
     line-height: 1.1;
     margin-bottom: 12px;
-    background: linear-gradient(135deg, #fff, #a0a0c0);
+    background: linear-gradient(135deg, #fff, #e8c9a0);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -125,7 +126,26 @@ body {
 .hero-role {
     font-size: 1.4rem;
     color: var(--text-muted);
+}
+
+.hero-role-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
     margin-bottom: 20px;
+}
+
+.hero-resume-link {
+    color: var(--accent);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.hero-resume-link:hover {
+    color: var(--text);
+    text-decoration: underline;
 }
 
 .hero-desc {
@@ -153,12 +173,13 @@ body {
 
 .btn-primary {
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #fff;
+    color: #1a120b; /* Темный текст для контраста на золотом */
+    font-weight: 600;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.35);
+    box-shadow: 0 8px 24px rgba(199, 139, 74, 0.35);
 }
 
 .btn-outline {
@@ -170,19 +191,35 @@ body {
     border-color: var(--accent);
     color: var(--accent);
 }
-
-.avatar-circle {
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+/* Hero avatar */
+.hero-avatar {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
-    font-weight: 700;
-    color: #fff;
-    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+}
+
+.avatar-img {
+    width: 260px;
+    height: 260px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;          /* чтобы фото не растягивалось */
+    object-position: center;
+    display: block;
+    border: 3px solid var(--accent);
+    box-shadow:
+        0 20px 60px rgba(199, 139, 74, 0.35),
+        0 0 0 6px rgba(199, 139, 74, 0.08);
+    user-select: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar-img:hover {
+    transform: scale(1.03);
+    box-shadow:
+        0 24px 70px rgba(199, 139, 74, 0.5),
+        0 0 0 8px rgba(199, 139, 74, 0.12);
 }
 
 /* Sections */
@@ -236,11 +273,12 @@ body {
 .skill-card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .skill-card h3 {
     margin-bottom: 8px;
-    color: var(--text);
+    color: var(--accent-2); /* Светлый акцент для заголовков */
 }
 
 .skill-card p {
@@ -268,6 +306,7 @@ body {
 .project-card:hover {
     transform: translateY(-6px);
     border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .project-image {
@@ -283,6 +322,7 @@ body {
 
 .project-info h3 {
     margin-bottom: 8px;
+    color: var(--text);
 }
 
 .project-info p {
@@ -302,9 +342,10 @@ body {
 .project-tags span {
     font-size: 0.75rem;
     padding: 4px 10px;
-    background: rgba(102, 126, 234, 0.15);
+    background: rgba(199, 139, 74, 0.15); /* Прозрачный золотой */
     color: var(--accent);
     border-radius: 20px;
+    border: 1px solid rgba(199, 139, 74, 0.3);
 }
 
 .project-link {
@@ -316,6 +357,7 @@ body {
 
 .project-link:hover {
     text-decoration: underline;
+    color: var(--accent-2);
 }
 
 /* Contact */
@@ -346,6 +388,7 @@ body {
     border-color: var(--accent);
     color: var(--accent);
     transform: translateY(-2px);
+    background: rgba(199, 139, 74, 0.05);
 }
 
 /* Footer */
@@ -356,6 +399,7 @@ body {
     font-size: 0.9rem;
     border-top: 1px solid var(--border);
 }
+
 
 /* Mobile */
 @media (max-width: 768px) {
@@ -406,3 +450,4 @@ body {
         padding: 60px 0;
     }
 }
+
