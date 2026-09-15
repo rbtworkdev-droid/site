@@ -354,12 +354,12 @@ body {
 /* При наведении на карточку фото чуть «оживает» */
 .project-card:hover .project-image img {
     filter:
-        blur(3px)
-        saturate(0.95)
-        brightness(0.85)
-        sepia(0.28)
+        blur(0.3px)
+        saturate(0.9)
+        brightness(0.78)
+        sepia(0.3)
         contrast(1.05);
-    transform: scale(1.12);
+    transform: scale(1.20);
 }
 
 .project-info {
