@@ -149,7 +149,18 @@ document.querySelectorAll('.skill-card, .project-card').forEach(el => {
         // связи между соседними узлами
         const links = [];
         for (let i = 0; i < placed.length - 1; i++) {
-            links.push({ from: i, to: i + 1, life: 0, target: 1 });
+            links.push({
+                from: i,
+                to: i + 1,
+                progress: Math.random(),
+                speed: rand(0.25, 0.45),
+                alpha: 0,
+                fadeIn: rand(0.8, 1.4),
+                fadeOut: rand(0.4, 0.8),
+                holdTimer: 0,
+                holdDuration: rand(0.4, 1.0),
+                holding: false,
+            });
         }
 
         // начальная позиция дорожки
@@ -233,6 +244,8 @@ document.querySelectorAll('.skill-card, .project-card').forEach(el => {
 
     // Рисуем пунктирный поток между двумя точками с постепенным проявлением
     function drawFlow(x1, y1, x2, y2, progress) {
+        if (progress <= 0.001) return;
+
         // обрезаем линию по progress — поток «течёт» от from к to
         const px = x1 + (x2 - x1) * progress;
         const py = y1 + (y2 - y1) * progress;
@@ -309,20 +322,38 @@ document.querySelectorAll('.skill-card, .project-card').forEach(el => {
             // Сначала — потоки (под фигурами)
             ctx.strokeStyle = COL.soft;
             ctx.lineWidth = 1.3;
-            ctx.setLineDash([6, 6]);
             for (const link of s.links) {
                 const a = s.nodes[link.from];
                 const b = s.nodes[link.to];
 
-                // анимация проявления потока
-                link.life += dt * 0.35;
-                if (link.life > 1) link.life = 0; // цикл: поток «пробегает» заново
+                link.progress += dt * link.speed;
 
-                const progress = Math.min(1, link.life);
-                ctx.globalAlpha = s.alpha * 1.15 * Math.min(1, link.life * 2);
-                drawFlow(a.x, a.y, b.x, b.y, progress);
+                if (link.progress >= 1) {
+                    link.progress = 1;
+                    if (!link.holding) {
+                        link.holding = true;
+                        link.holdTimer = link.holdDuration;
+                    } else {
+                        link.holdTimer -= dt;
+                        if (link.holdTimer <= 0) {
+                            link.alpha -= dt * link.fadeOut;
+                            if (link.alpha <= 0) {
+                                link.alpha = 0;
+                                link.progress = 0;
+                                link.holdTimer = 0;
+                                link.holding = false;
+                            }
+                        }
+                    }
+                } else {
+                    link.alpha = Math.min(1, link.alpha + dt * link.fadeIn);
+                }
+
+                ctx.globalAlpha = s.alpha * 1.15 * link.alpha;
+                ctx.setLineDash([6, 6]);
+                drawFlow(a.x, a.y, b.x, b.y, link.progress);
+                ctx.setLineDash([]);
             }
-            ctx.setLineDash([]);
 
             // Затем — узлы
             for (const n of s.nodes) {
