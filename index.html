@@ -111,53 +111,21 @@
         </div>
     </section>
 
-    <section id="projects" class="section">
-        <div class="container">
-            <h2 class="section-title">Кейсы</h2>
-            <div class="projects-grid">
-                <article class="project-card">
-                     <span class="project-hours">300ч+</span>
-                    <div class="project-image">
-    <img src="beton.jpeg" alt="Производитель бетона" loading="lazy">
-</div>
-                    <div class="project-info">
-                        <h3>Производитель бетона</h3>
-                        <p>Стандартная организация работы отдела продаж, разработка объёмных бизнес-процессов на согласования документов, кастомизация портала. Автоматизация документаоборота. Онлайн-запись аренды оборудования.</p>
-                        <div class="project-tags">
-                            
-                            <span>B2B</span><span>Бизнес-процессы</span><span>Документооборот</span><span>Онлайн-запись</span>
-                        </div>
-                    </div>
-                </article>
+   <section id="projects" class="section">
+    <div class="container">
+        <h2 class="section-title">Кейсы</h2>
 
-                <article class="project-card">
-                     <span class="project-hours">120ч</span>
-                <div class="project-image">
-    <img src="uhasstok.jpg" alt="Производитель бетона" loading="lazy">
-</div>
-                    <div class="project-info">
-                        <h3>Застройщик частных домов</h3>
-                        <p>Анализ рабочих процессов проектной группы. Автоматизация постановки и контроля за сроками задач. Разработка BI отчётов на конструкторе с использованием SQL для отслеживания источников трафика по регионам.</p>
-                        <div class="project-tags">
-                           <span>B2C</span> <span>Проеты & задачи</span><span>Маркетинг</span><span>Автоматизация рабочих циклов</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="project-card">
-                     <span class="project-hours">250ч+</span>
-                     <div class="project-image">
-    <img src="zakup.jpg" alt="Производитель бетона" loading="lazy">
-</div> <div class="project-info">
-                        <h3>Отдел закупок</h3>
-                        <p>Автоматизация рутины, создание системы учёта компаний-посредников, разработка процессов конкурсов и системы рейтинга. Оценка эффективности работы с разными посредниками. Автоматические сценарии под нужны отдела продаж. Синхронизация с 1C:ERP.</p>
-                        <div class="project-tags">
-                            <span>Отдел закупок</span><span>Бизнес-процессы</span><span>Складской учёт</span><span>1C</span><span>Метрики</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
+        <!-- Сюда JS отрисует карточки -->
+        <div class="projects-grid" id="projectsGrid"></div>
+
+        <!-- Кнопка "Показать ещё" (по желанию) -->
+        <div class="projects-more">
+            <button id="loadMoreBtn" class="btn btn-outline" type="button">
+                Показать ещё
+            </button>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="contact" class="section section-alt">
         <div class="container">

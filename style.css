@@ -434,16 +434,15 @@ body {
     border: 1px solid rgba(199, 139, 74, 0.3);
 }
 
-.project-link {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
+/* ===== Лента кейсов: кнопка "Показать ещё" ===== */
+.projects-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
 }
 
-.project-link:hover {
-    text-decoration: underline;
-    color: var(--accent-2);
+.projects-more .btn {
+    cursor: pointer;
 }
 
 /* Contact */

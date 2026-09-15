@@ -441,3 +441,135 @@ document.querySelectorAll('.skill-card, .project-card').forEach(el => {
         animationId = requestAnimationFrame(frame);
     }
 })();
+
+/* ===== Данные кейсов =====
+   Добавляете новый кейс — просто дописываете объект в массив.
+   Порядок в массиве = порядок в ленте.
+*/
+const PROJECTS = [
+    {
+        hours: "300ч+",
+        image: "beton.jpeg",
+        alt: "Производитель бетона",
+        title: "Производитель бетона",
+        description:
+            "Стандартная организация работы отдела продаж, разработка объёмных бизнес-процессов на согласования документов, кастомизация портала. Автоматизация документооборота. Онлайн-запись аренды оборудования.",
+        tags: ["B2B", "Бизнес-процессы", "Документооборот", "Онлайн-запись"],
+    },
+    {
+        hours: "120ч",
+        image: "uhasstok.jpg",
+        alt: "Застройщик частных домов",
+        title: "Застройщик частных домов",
+        description:
+            "Анализ рабочих процессов проектной группы. Автоматизация постановки и контроля за сроками задач. Разработка BI отчётов на конструкторе с использованием SQL для отслеживания источников трафика по регионам.",
+        tags: ["B2C", "Проекты & задачи", "Маркетинг", "Автоматизация рабочих циклов"],
+    },
+    {
+        hours: "250ч+",
+        image: "zakup.jpg",
+        alt: "Отдел закупок",
+        title: "Отдел закупок",
+        description:
+            "Автоматизация рутины, создание системы учёта компаний-посредников, разработка процессов конкурсов и системы рейтинга. Оценка эффективности работы с разными посредниками. Автоматические сценарии под нужды отдела продаж. Синхронизация с 1C:ERP.",
+        tags: ["Отдел закупок", "Бизнес-процессы", "Складской учёт", "1C", "Метрики"],
+    },
+    {
+    hours: "90ч",
+    image: "b96c5ff22cc7cea83a8d.jpg",
+    alt: "Онлайн школа",
+    title: "Онлайн школа",
+    description: "Кастомизированная разработка коробочной версии со сквозной передачей данных между модулями и мониторингом акций. Разработка кастомизированных бизнес-процессов с php и REST-API доработками. Подключение мессенджеров и виртуальной телефонии. После окончания внедрения, передача клиента в другие команды разработки.",
+    tags: ["B2C", "Виртуальная ATC", "Разработка","LTV стратегия"],
+},
+{
+    hours: "180ч",
+    image: "about-new26.jpg",
+    alt: "Изготовитель премиальной мебели",
+    title: "Изготовитель премиальной мебели",
+    description: "Чистка текущей системы клиента, настройка работы с дублями и открытых линий. Автоматизация работы с документооборотом. Масштабная интеграция с 1C:УТ. Настройка и автоматизация форм связи. Настройка административной части портала и обновление лицензий.",
+    tags: ["B2B", "Сопровождение", "1C","CRM Формы", "Открытые линии"],
+}, 
+{
+    hours: "от 40ч",
+    image: "image_2026-09-15_16-50-47.png",
+    alt: "Изготовитель премиальной мебели",
+    title: "Внедрение маркетинга",
+    description: "Документация, разработанная для внедрения по направлению маркетинга. Содержит описание, рекомендации по внедрению и список инструментов для централизации, компоновки и использования данных в маркетинговых целях.",
+    tags: ["Модуль", "Сопровождение", "Маркетинг","Допродажа"],
+}, // // ← добавляйте новые кейсы здесь
+];
+
+/* ===== Отрисовка ленты ===== */
+const grid = document.getElementById("projectsGrid");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+const BATCH_SIZE = 6;      // сколько карточек показывать за раз
+let rendered = 0;
+
+function escapeHtml(str = "") {
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function createCard(project) {
+    const article = document.createElement("article");
+    article.className = "project-card";
+
+    const tags = (project.tags || [])
+        .map((t) => `<span>${escapeHtml(t)}</span>`)
+        .join("");
+
+    article.innerHTML = `
+        <span class="project-hours">${escapeHtml(project.hours)}</span>
+        <div class="project-image">
+            <img src="${escapeHtml(project.image)}"
+                 alt="${escapeHtml(project.alt || project.title)}"
+                 loading="lazy">
+        </div>
+        <div class="project-info">
+            <h3>${escapeHtml(project.title)}</h3>
+            <p>${escapeHtml(project.description)}</p>
+            <div class="project-tags">${tags}</div>
+        </div>
+    `;
+
+    return article;
+}
+
+function renderBatch() {
+    const slice = PROJECTS.slice(rendered, rendered + BATCH_SIZE);
+
+    slice.forEach((project, i) => {
+        const card = createCard(project);
+        // лёгкая каскадная анимация появления
+        card.style.opacity = "0";
+        card.style.transform = "translateY(12px)";
+        card.style.transition = "opacity .4s ease, transform .4s ease";
+        grid.appendChild(card);
+
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+            }, i * 60);
+        });
+    });
+
+    rendered += slice.length;
+
+    if (rendered >= PROJECTS.length && loadMoreBtn) {
+        loadMoreBtn.style.display = "none";
+    }
+}
+
+if (grid) {
+    renderBatch();
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener("click", renderBatch);
+    }
+}
