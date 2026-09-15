@@ -1,13 +1,24 @@
 // Год в футере
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Логотип: возвращаемся наверх без ломки страницы и без пустого хэша
+const logo = document.querySelector('.logo');
+if (logo) {
+    logo.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
 // Мобильное меню
 const burger = document.querySelector('.burger');
 const navLinks = document.querySelector('.nav-links');
 
-burger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-});
+if (burger && navLinks) {
+    burger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+}
 
 // Закрываем меню при клике по ссылке
 document.querySelectorAll('.nav-links a').forEach(link => {

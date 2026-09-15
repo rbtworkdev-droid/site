@@ -56,10 +56,13 @@ body {
     font-weight: 700;
     color: var(--text);
     text-decoration: none;
+    user-select: none;
+    cursor: pointer;
 }
 
 .logo span {
     color: var(--accent);
+    user-select: none;
 }
 
 .nav-links {
