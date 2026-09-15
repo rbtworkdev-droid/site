@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Иван Иванов — Портфолио</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">Иван<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#about">Обо мне</a></li>
+                <li><a href="#skills">Навыки</a></li>
+                <li><a href="#projects">Проекты</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+            <button class="burger" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <p class="hero-greeting">Привет, меня зовут</p>
+                <h1>Иван Иванов</h1>
+                <p class="hero-role">Frontend-разработчик</p>
+                <p class="hero-desc">
+                    Создаю современные и удобные веб-интерфейсы.
+                    Люблю чистый код и продуманный дизайн.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">Мои проекты</a>
+                    <a href="#contact" class="btn btn-outline">Связаться</a>
+                </div>
+            </div>
+            <div class="hero-avatar">
+                <div class="avatar-circle">ИИ</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">Обо мне</h2>
+            <div class="about-content">
+                <p>
+                    Я начинающий веб-разработчик с опытом создания адаптивных
+                    и производительных сайтов. Работаю с HTML, CSS, JavaScript
+                    и современными фреймворками. Постоянно учусь новому и
+                    применяю знания в реальных проектах.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Навыки</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>HTML5</h3>
+                    <p>Семантическая разметка, доступность</p>
+                </div>
+                <div class="skill-card">
+                    <h3>CSS3</h3>
+                    <p>Flexbox, Grid, анимации, адаптивность</p>
+                </div>
+                <div class="skill-card">
+                    <h3>JavaScript</h3>
+                    <p>ES6+, DOM, асинхронность, fetch API</p>
+                </div>
+                <div class="skill-card">
+                    <h3>React</h3>
+                    <p>Компоненты, хуки, роутинг</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Git</h3>
+                    <p>Ветвление, коммиты, pull requests</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Figma</h3>
+                    <p>Вёрстка по макетам, работа с дизайном</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title">Проекты</h2>
+            <div class="projects-grid">
+                <article class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                    <div class="project-info">
+                        <h3>Todo-приложение</h3>
+                        <p>Приложение для управления задачами с сохранением в localStorage.</p>
+                        <div class="project-tags">
+                            <span>HTML</span><span>CSS</span><span>JS</span>
+                        </div>
+                        <a href="#" class="project-link">Посмотреть →</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+                    <div class="project-info">
+                        <h3>Погодное приложение</h3>
+                        <p>Показывает текущую погоду по данным OpenWeather API.</p>
+                        <div class="project-tags">
+                            <span>JS</span><span>API</span><span>CSS</span>
+                        </div>
+                        <a href="#" class="project-link">Посмотреть →</a>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+                    <div class="project-info">
+                        <h3>Лендинг для стартапа</h3>
+                        <p>Адаптивный лендинг с анимациями и формой обратной связи.</p>
+                        <div class="project-tags">
+                            <span>HTML</span><span>CSS</span>
+                        </div>
+                        <a href="#" class="project-link">Посмотреть →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Контакты</h2>
+            <p class="contact-text">Хотите обсудить проект или просто поздороваться? Пишите!</p>
+            <div class="contact-links">
+                <a href="mailto:ivan@example.com" class="contact-link">📧 ivan@example.com</a>
+                <a href="https://github.com/" target="_blank" class="contact-link">🐙 GitHub</a>
+                <a href="https://t.me/" target="_blank" class="contact-link">✈️ Telegram</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© <span id="year"></span> Иван Иванов. Сделано с ❤️</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
