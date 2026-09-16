@@ -20,6 +20,57 @@ if (burger && navLinks) {
     });
 }
 
+// Создание сделки через входящий вебхук Bitrix24
+const dealForm = document.getElementById('dealForm');
+const createDealBtn = document.getElementById('createDealBtn');
+const dealFormStatus = document.getElementById('dealFormStatus');
+const bitrixWebhookUrl = 'https://b24-od3dd2.bitrix24.ru/rest/1/ob14ff7ksm9lv0rw/';
+
+if (dealForm && createDealBtn && dealFormStatus) {
+    dealForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(dealForm);
+        const name = String(formData.get('name') || '').trim();
+        const contact = String(formData.get('contact') || '').trim();
+        const comment = String(formData.get('comment') || '').trim();
+
+        createDealBtn.disabled = true;
+        dealFormStatus.className = 'deal-form-status';
+        dealFormStatus.textContent = 'Создаём сделку...';
+
+        try {
+            const response = await fetch(`${bitrixWebhookUrl}crm.deal.add.json`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    fields: {
+                        TITLE: `Заявка с сайта: ${name}`,
+                        COMMENTS: [
+                            `Контакт: ${contact}`,
+                            comment || 'Заявка отправлена с сайта.',
+                        ].join('\n'),
+                        SOURCE_ID: 'WEB',
+                    },
+                }),
+            });
+            const result = await response.json();
+
+            if (!response.ok || result.error) {
+                throw new Error(result.error_description || 'Bitrix24 не принял запрос.');
+            }
+
+            dealFormStatus.className = 'deal-form-status is-success';
+            dealFormStatus.textContent = `Ваша заявка #${result.result} успешно отправлена через входящий вебхук.`;
+            dealForm.reset();
+        } catch (error) {
+            dealFormStatus.className = 'deal-form-status is-error';
+            dealFormStatus.textContent = error.message || 'Не удалось создать сделку. Необходимо сменить вебхук.';
+        } finally {
+            createDealBtn.disabled = false;
+        }
+    });
+}
+
 // Закрываем меню при клике по ссылке
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {

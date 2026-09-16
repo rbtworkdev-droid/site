@@ -489,6 +489,73 @@ body {
     background: rgba(199, 139, 74, 0.05);
 }
 
+.deal-form-wrap {
+    max-width: 620px;
+    margin-top: 48px;
+    padding: 28px;
+    background: rgba(46, 31, 21, 0.78);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.deal-form-wrap h3 {
+    margin-bottom: 6px;
+    color: var(--accent-2);
+}
+
+.deal-form-description {
+    margin-bottom: 20px;
+    color: var(--text-muted);
+}
+
+.deal-form {
+    display: grid;
+    gap: 16px;
+}
+
+.deal-form label {
+    display: grid;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.deal-form input,
+.deal-form textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(26, 18, 11, 0.72);
+    color: var(--text);
+    font: inherit;
+    resize: vertical;
+}
+
+.deal-form input:focus,
+.deal-form textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.deal-form .btn:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.deal-form-status {
+    min-height: 1.5em;
+    color: var(--text-muted);
+}
+
+.deal-form-status.is-success {
+    color: #9ad5a0;
+}
+
+.deal-form-status.is-error {
+    color: #e99b8c;
+}
+
 /* Footer */
 .footer {
     padding: 32px 0;
