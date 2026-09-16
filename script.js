@@ -60,7 +60,7 @@ if (dealForm && createDealBtn && dealFormStatus) {
             }
 
             dealFormStatus.className = 'deal-form-status is-success';
-            dealFormStatus.textContent = `Ваша заявка #${result.result} успешно отправлена через входящий вебхук.`;
+            dealFormStatus.textContent = `Ваша заявка номер ${result.result} успешно отправлена через входящий вебхук.`;
             dealForm.reset();
         } catch (error) {
             dealFormStatus.className = 'deal-form-status is-error';
