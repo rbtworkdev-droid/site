@@ -28,6 +28,46 @@ body {
     overflow-x: hidden;
     user-select: text;
     -webkit-user-select: text;
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.section-tracker {
+    position: fixed;
+    top: 50%;
+    right: 18px;
+    z-index: 105;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transform: translateY(-50%);
+}
+
+.section-dot {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: 0 0 0 3px rgba(26, 18, 11, 0.45);
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.section-dot:hover,
+.section-dot:focus-visible {
+    transform: scale(1.25);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(199, 139, 74, 0.2);
+}
+
+.section-dot.is-active {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(199, 139, 74, 0.18), 0 0 12px rgba(199, 139, 74, 0.45);
 }
 
 .container {
@@ -1059,5 +1099,15 @@ body {
     .calculator-toggle {
         right: 12px;
         bottom: 16px;
+    }
+
+    .section-tracker {
+        right: 10px;
+        gap: 10px;
+    }
+
+    .section-dot {
+        width: 10px;
+        height: 10px;
     }
 }

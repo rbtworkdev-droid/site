@@ -20,6 +20,62 @@ if (burger && navLinks) {
     });
 }
 
+// Кастомный трекер разделов вместо системного скроллбара
+const sectionTracker = document.getElementById('sectionTracker');
+const trackedSections = [
+    document.querySelector('.hero'),
+    ...['about', 'skills', 'projects', 'experience', 'contact']
+        .map(sectionId => document.getElementById(sectionId)),
+].filter(Boolean);
+
+if (sectionTracker && trackedSections.length) {
+    const sectionDots = [...sectionTracker.querySelectorAll('.section-dot')];
+    let activeSectionIndex = 0;
+    let scrollFrame = 0;
+
+    const updateSectionTracker = () => {
+        const viewportCenter = window.innerHeight / 2;
+        let nearestSectionIndex = 0;
+        let nearestDistance = Infinity;
+
+        trackedSections.forEach((section, index) => {
+            const bounds = section.getBoundingClientRect();
+            const sectionCenter = bounds.top + bounds.height / 2;
+            const distance = Math.abs(sectionCenter - viewportCenter);
+
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestSectionIndex = index;
+            }
+        });
+
+        if (nearestSectionIndex === activeSectionIndex) return;
+
+        activeSectionIndex = nearestSectionIndex;
+        sectionDots.forEach((dot, index) => {
+            const isActive = index === activeSectionIndex;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-current', String(isActive));
+        });
+    };
+
+    window.addEventListener('scroll', () => {
+        if (scrollFrame) return;
+        scrollFrame = requestAnimationFrame(() => {
+            updateSectionTracker();
+            scrollFrame = 0;
+        });
+    }, { passive: true });
+
+    sectionDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            trackedSections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    updateSectionTracker();
+}
+
 // Калькулятор операций над двумя числами
 const calculatorForm = document.getElementById('calculatorForm');
 const calculatorResult = document.getElementById('calculatorResult');
