@@ -977,8 +977,8 @@ body::-webkit-scrollbar {
     text-align: center;
 }
 
-.styled-table th:nth-child(2),
-.styled-table td:nth-child(2) {
+.styled-table thead th + th,
+.styled-table tbody td + td {
     border-left: 1px solid var(--border);
 }
 

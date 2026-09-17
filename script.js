@@ -522,6 +522,7 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
                 progress: Math.random(),
                 speed: rand(0.25, 0.45),
                 alpha: 0,
+                headAlpha: 0,
                 fadeIn: rand(0.8, 1.4),
                 fadeOut: rand(0.4, 0.8),
                 holdTimer: 0,
@@ -540,6 +541,7 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
             totalW,
             x: startX,
             y: startY,
+            targetY: startY,
             vx: rand(-0.06, 0.06),
             vy: rand(-0.05, 0.05),
             alpha: rand(0.16, 0.27),                            // общая прозрачность
@@ -586,9 +588,13 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
                     const secondCenter = (secondBounds.top + secondBounds.bottom) / 2;
                     const separation = (firstBounds.bottom - secondBounds.top) / 2 + 8;
                     const direction = firstCenter <= secondCenter ? -1 : 1;
+                    const push = Math.min(12, separation * 0.18);
 
-                    first.y += separation * direction;
-                    second.y -= separation * direction;
+                    // Мягкое отталкивание через targetY, чтобы дорожки не «телепортировались».
+                    first.targetY += push * direction;
+                    second.targetY -= push * direction;
+                    first.vy += direction * 0.06;
+                    second.vy -= direction * 0.06;
                 }
             }
         }
@@ -651,11 +657,11 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
         ctx.globalAlpha /= 0.5;
     }
 
-    // Рисуем пунктирный поток между двумя точками с постепенным проявлением
-    function drawFlow(x1, y1, x2, y2, progress) {
+    // Рисуем пунктирный поток между двумя точками с постепенным проявлением.
+    // Наконечник стрелки должен затухать плавно, а не исчезать мгновенно.
+    function drawFlow(x1, y1, x2, y2, progress, headAlpha = 1) {
         if (progress <= 0.001) return;
 
-        // обрезаем линию по progress — поток «течёт» от from к to
         const px = x1 + (x2 - x1) * progress;
         const py = y1 + (y2 - y1) * progress;
 
@@ -667,18 +673,19 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // стрелка у «головы» потока
         if (progress > 0.15) {
             const ang = Math.atan2(y2 - y1, x2 - x1);
             const ah = 7;
-            const hx = px, hy = py;
+            const previousAlpha = ctx.globalAlpha;
+            ctx.globalAlpha = previousAlpha * headAlpha;
             ctx.beginPath();
-            ctx.moveTo(hx, hy);
-            ctx.lineTo(hx - ah * Math.cos(ang - 0.45), hy - ah * Math.sin(ang - 0.45));
-            ctx.moveTo(hx, hy);
-            ctx.lineTo(hx - ah * Math.cos(ang + 0.45), hy - ah * Math.sin(ang + 0.45));
+            ctx.moveTo(px, py);
+            ctx.lineTo(px - ah * Math.cos(ang - 0.45), py - ah * Math.sin(ang - 0.45));
+            ctx.moveTo(px, py);
+            ctx.lineTo(px - ah * Math.cos(ang + 0.45), py - ah * Math.sin(ang + 0.45));
             ctx.stroke();
         }
+
         ctx.restore();
     }
 
@@ -711,7 +718,10 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
 
         for (const s of streams) {
             // мягкое смещение и дрейф всей дорожки
+            s.vx *= 0.985;
+            s.vy *= 0.965;
             s.x += s.vx * 60 * dt;
+            s.y += (s.targetY - s.y) * 0.08;
             s.y += s.vy * 60 * dt;
 
             // «дыхание» положения
@@ -751,6 +761,7 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
                             if (link.alpha <= 0) {
                                 link.alpha = 0;
                                 link.progress = 0;
+                                link.headAlpha = 0;
                                 link.holdTimer = 0;
                                 link.holding = false;
                             }
@@ -760,9 +771,16 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
                     link.alpha = Math.min(1, link.alpha + dt * link.fadeIn);
                 }
 
+                if (link.alpha > 0.02) {
+                    link.headAlpha = link.progress > 0.02
+                        ? Math.min(1, link.headAlpha + dt * 4.5)
+                        : Math.max(0, link.headAlpha - dt * 5);
+                } else {
+                    link.headAlpha = Math.max(0, link.headAlpha - dt * 7);
+                }
+
                 ctx.globalAlpha = s.alpha * 1.15 * link.alpha;
-                ctx.setLineDash([6, 6]);
-                drawFlow(a.x, a.y, b.x, b.y, link.progress);
+                drawFlow(a.x, a.y, b.x, b.y, link.progress, link.headAlpha);
                 ctx.setLineDash([]);
             }
 
