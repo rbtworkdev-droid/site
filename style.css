@@ -965,6 +965,20 @@ body {
     background: rgba(199, 139, 74, 0.08);
 }
 
+.styled-table tbody tr.table-total-row {
+    background: rgba(199, 139, 74, 0.12);
+    border-top: 2px solid var(--accent);
+}
+
+.styled-table tbody tr.table-total-row td {
+    color: var(--accent-2);
+    font-weight: 700;
+}
+
+.styled-table tbody tr.table-total-row td:nth-child(3) {
+    color: #9ad5a0;
+}
+
 /* Убираем нижнюю границу у последней строки */
 .styled-table tbody tr:last-child td {
     border-bottom: none;

@@ -23,6 +23,7 @@ if (burger && navLinks) {
 // Калькулятор операций над двумя числами
 const calculatorForm = document.getElementById('calculatorForm');
 const calculatorResult = document.getElementById('calculatorResult');
+const calculatorNumberInputs = calculatorForm?.querySelectorAll('input[name="firstNumber"], input[name="secondNumber"]') || [];
 const calculatorOperation = document.getElementById('calculatorOperation');
 const operationButtons = document.querySelectorAll('.operation-button');
 const calculatorToggle = document.getElementById('calculatorToggle');
@@ -38,6 +39,21 @@ const parseCalculatorNumber = value => {
 const formatCalculatorNumber = value => new Intl.NumberFormat('ru-RU', {
     maximumFractionDigits: 20,
 }).format(value).replace(/[\u00a0\u202f]/g, ' ');
+
+const armCalculatorInputReset = () => {
+    calculatorNumberInputs.forEach(input => {
+        input.dataset.clearOnFocus = 'true';
+    });
+};
+
+calculatorNumberInputs.forEach(input => {
+    input.addEventListener('focus', () => {
+        if (input.dataset.clearOnFocus !== 'true' || !input.value) return;
+
+        input.value = '';
+        delete input.dataset.clearOnFocus;
+    });
+});
 
 const copyTextToClipboard = async text => {
     if (navigator.clipboard && window.isSecureContext) {
@@ -94,6 +110,7 @@ if (calculatorForm && calculatorResult) {
         const formattedResult = formatCalculatorNumber(result);
         calculatorResult.dataset.value = formattedResult;
         calculatorResult.textContent = formattedResult;
+        armCalculatorInputReset();
     });
 
     let copyMessageTimer;
