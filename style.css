@@ -929,7 +929,12 @@ body::-webkit-scrollbar {
     border: 1px solid var(--border);
     background: var(--card);
     overflow: hidden;
+    scrollbar-width: none;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.table-wrap::-webkit-scrollbar {
+    display: none;
 }
 
 /* Мягкая тёплая подсветка сверху, как у карточек */
