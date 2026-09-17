@@ -291,11 +291,53 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
         };
     }
 
+    function getStreamBounds(stream, swayX = 0, swayY = 0, breathe = 1) {
+        const scale = stream.scale * breathe;
+        const maxNodeH = Math.max(...stream.nodes.map(node => node.h));
+
+        return {
+            left: stream.x + swayX - 28 * scale,
+            right: stream.x + swayX + (stream.totalW + 28) * scale,
+            top: stream.y + swayY - maxNodeH * scale / 2 - 28 * scale,
+            bottom: stream.y + swayY + maxNodeH * scale / 2 + 28 * scale,
+        };
+    }
+
+    function boundsOverlap(first, second) {
+        return first.left < second.right && first.right > second.left
+            && first.top < second.bottom && first.bottom > second.top;
+    }
+
+    function separateStreams() {
+        for (let pass = 0; pass < 3; pass++) {
+            for (let i = 0; i < streams.length; i++) {
+                const first = streams[i];
+                const firstBounds = getStreamBounds(first);
+
+                for (let j = i + 1; j < streams.length; j++) {
+                    const second = streams[j];
+                    const secondBounds = getStreamBounds(second);
+
+                    if (!boundsOverlap(firstBounds, secondBounds)) continue;
+
+                    const firstCenter = (firstBounds.top + firstBounds.bottom) / 2;
+                    const secondCenter = (secondBounds.top + secondBounds.bottom) / 2;
+                    const separation = (firstBounds.bottom - secondBounds.top) / 2 + 8;
+                    const direction = firstCenter <= secondCenter ? -1 : 1;
+
+                    first.y += separation * direction;
+                    second.y -= separation * direction;
+                }
+            }
+        }
+    }
+
     function buildScene() {
         // Больше дорожек и узлов создают плотный слой схемы на фоне.
         const density = (W * H) / 170000;
         const count = Math.max(5, Math.min(10, Math.round(density)));
         streams = Array.from({ length: count }, () => makeStream(true));
+        separateStreams();
     }
 
     /* ---------- Отрисовка ---------- */
@@ -402,6 +444,8 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
 
         ctx.lineJoin = 'round';
         ctx.lineCap  = 'round';
+
+        separateStreams();
 
         for (const s of streams) {
             // мягкое смещение и дрейф всей дорожки

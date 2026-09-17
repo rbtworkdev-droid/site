@@ -562,6 +562,7 @@ body {
     text-align: center;
     color: var(--text-muted);
     font-size: 0.9rem;
+    background: var(--bg);
     border-top: 1px solid var(--border);
 }
 
