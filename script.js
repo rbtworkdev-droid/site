@@ -20,6 +20,195 @@ if (burger && navLinks) {
     });
 }
 
+// Калькулятор операций над двумя числами
+const calculatorForm = document.getElementById('calculatorForm');
+const calculatorResult = document.getElementById('calculatorResult');
+const calculatorOperation = document.getElementById('calculatorOperation');
+const operationButtons = document.querySelectorAll('.operation-button');
+const calculatorToggle = document.getElementById('calculatorToggle');
+const calculatorWindow = document.getElementById('calculatorWindow');
+const calculatorClose = document.getElementById('calculatorClose');
+const calculatorHeader = document.getElementById('calculatorHeader');
+
+const parseCalculatorNumber = value => {
+    const normalizedValue = String(value || '').trim().replace(/[.,\s\u00a0]/g, '');
+    return normalizedValue ? Number(normalizedValue) : NaN;
+};
+
+const formatCalculatorNumber = value => new Intl.NumberFormat('ru-RU', {
+    maximumFractionDigits: 20,
+}).format(value).replace(/[\u00a0\u202f]/g, ' ');
+
+const copyTextToClipboard = async text => {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+    }
+
+    const temporaryInput = document.createElement('textarea');
+    temporaryInput.value = text;
+    temporaryInput.setAttribute('readonly', '');
+    temporaryInput.style.position = 'fixed';
+    temporaryInput.style.opacity = '0';
+    document.body.appendChild(temporaryInput);
+    temporaryInput.select();
+
+    const copied = document.execCommand('copy');
+    temporaryInput.remove();
+
+    if (!copied) throw new Error('Не удалось скопировать результат.');
+};
+
+if (calculatorForm && calculatorResult) {
+    calculatorForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(calculatorForm);
+        const firstNumber = parseCalculatorNumber(formData.get('firstNumber'));
+        const secondNumber = parseCalculatorNumber(formData.get('secondNumber'));
+        const operation = formData.get('operation');
+        let result;
+
+        if (!Number.isFinite(firstNumber) || !Number.isFinite(secondNumber)) {
+            calculatorResult.className = 'calculator-result is-error';
+            calculatorResult.textContent = 'Введите корректные числа';
+            delete calculatorResult.dataset.value;
+            return;
+        }
+
+        if (operation === 'add') result = firstNumber + secondNumber;
+        if (operation === 'subtract') result = firstNumber - secondNumber;
+        if (operation === 'multiply') result = firstNumber * secondNumber;
+
+        if (operation === 'divide') {
+            if (secondNumber === 0) {
+                calculatorResult.className = 'calculator-result is-error';
+                calculatorResult.textContent = 'На ноль делить нельзя';
+                delete calculatorResult.dataset.value;
+                return;
+            }
+            result = firstNumber / secondNumber;
+        }
+
+        calculatorResult.className = 'calculator-result';
+        const formattedResult = formatCalculatorNumber(result);
+        calculatorResult.dataset.value = formattedResult;
+        calculatorResult.textContent = formattedResult;
+    });
+
+    let copyMessageTimer;
+
+    calculatorResult.addEventListener('click', async () => {
+        const resultValue = calculatorResult.dataset.value;
+        if (!resultValue) return;
+
+        try {
+            await copyTextToClipboard(resultValue);
+            calculatorResult.className = 'calculator-result is-copied';
+            calculatorResult.textContent = 'Скопировано';
+            clearTimeout(copyMessageTimer);
+            copyMessageTimer = setTimeout(() => {
+                calculatorResult.className = 'calculator-result';
+                calculatorResult.textContent = resultValue;
+            }, 1200);
+        } catch (error) {
+            calculatorResult.className = 'calculator-result is-error';
+            calculatorResult.textContent = 'Не удалось скопировать';
+            clearTimeout(copyMessageTimer);
+            copyMessageTimer = setTimeout(() => {
+                calculatorResult.className = 'calculator-result';
+                calculatorResult.textContent = resultValue;
+            }, 1600);
+        }
+    });
+}
+
+operationButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        operationButtons.forEach(operationButton => {
+            const isSelected = operationButton === button;
+            operationButton.classList.toggle('is-selected', isSelected);
+            operationButton.setAttribute('aria-pressed', String(isSelected));
+        });
+
+        if (calculatorOperation) {
+            calculatorOperation.value = button.dataset.operation;
+        }
+    });
+});
+
+// Показываем кнопку только во время просмотра таблицы
+const experienceTable = document.querySelector('.table-wrap');
+
+if (experienceTable && calculatorToggle && calculatorWindow) {
+    let isTableVisible = false;
+    let isCalculatorOpen = false;
+
+    const updateCalculatorToggle = () => {
+        const shouldShowToggle = isTableVisible && !isCalculatorOpen;
+        calculatorToggle.classList.toggle('is-visible', shouldShowToggle);
+        calculatorToggle.setAttribute('aria-hidden', String(!shouldShowToggle));
+    };
+
+    const tableObserver = new IntersectionObserver(([entry]) => {
+        isTableVisible = entry.isIntersecting;
+        updateCalculatorToggle();
+    }, { threshold: 0.05 });
+
+    tableObserver.observe(experienceTable);
+
+    calculatorToggle.addEventListener('click', () => {
+        isCalculatorOpen = true;
+        calculatorWindow.hidden = false;
+        calculatorToggle.setAttribute('aria-expanded', 'true');
+        updateCalculatorToggle();
+    });
+
+    calculatorClose?.addEventListener('click', () => {
+        isCalculatorOpen = false;
+        calculatorWindow.hidden = true;
+        calculatorToggle.setAttribute('aria-expanded', 'false');
+        updateCalculatorToggle();
+    });
+}
+
+// Перетаскивание окна за заголовок мышью или пальцем
+if (calculatorHeader && calculatorWindow) {
+    let dragState = null;
+
+    calculatorHeader.addEventListener('pointerdown', (event) => {
+        if (event.target.closest('button')) return;
+
+        const bounds = calculatorWindow.getBoundingClientRect();
+        dragState = {
+            offsetX: event.clientX - bounds.left,
+            offsetY: event.clientY - bounds.top,
+        };
+        calculatorHeader.setPointerCapture(event.pointerId);
+    });
+
+    calculatorHeader.addEventListener('pointermove', (event) => {
+        if (!dragState) return;
+
+        const maxX = window.innerWidth - calculatorWindow.offsetWidth - 8;
+        const maxY = window.innerHeight - calculatorWindow.offsetHeight - 8;
+        const left = Math.min(Math.max(8, event.clientX - dragState.offsetX), maxX);
+        const top = Math.min(Math.max(8, event.clientY - dragState.offsetY), maxY);
+
+        calculatorWindow.style.left = `${left}px`;
+        calculatorWindow.style.top = `${top}px`;
+        calculatorWindow.style.right = 'auto';
+    });
+
+    calculatorHeader.addEventListener('pointerup', () => {
+        dragState = null;
+    });
+
+    calculatorHeader.addEventListener('pointercancel', () => {
+        dragState = null;
+    });
+}
+
 // Создание сделки через входящий вебхук Bitrix24
 const dealForm = document.getElementById('dealForm');
 const createDealBtn = document.getElementById('createDealBtn');

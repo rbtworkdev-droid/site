@@ -125,8 +125,122 @@
                 Показать ещё
             </button>
         </div>
+
     </div>
 </section>
+
+<section id="experience" class="section section-alt">
+    <div class="container">
+        <h2 class="section-title">Опыт по отраслям</h2>
+        <p class="table-intro">
+            Сводка по ключевым внедрениям: отрасль, роль, длительность и результат.
+            Данные обновляются по мере закрытия проектов.
+        </p>
+
+        <div class="table-wrap">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Отрасаль</th>
+                        <th>Колличество проектов</th>
+                        <th>Средняя стоимость</th>
+                        <th>Общий объём работ</th>
+                        <th>Оценка опыта</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Производство</td>
+                        <td>5</td>
+                        <td>650.000р.</td>
+                        <td>960ч</td>
+                        <td><span class="status status-done">Продвинутый</span></td>
+                    </tr>
+                    <tr>
+                        <td>Услуги/сервис</td>
+                        <td>9</td>
+                        <td>330.000р.</td>
+                        <td>740ч</td>
+                        <td><span class="status status-done">Продвинутый</span></td>
+                    </tr>
+                    <tr>
+                        <td>Розничная торговля</td>
+                        <td>4</td>
+                        <td>220.000р.</td>
+                        <td>210ч</td>
+                        <td><span class="status status-progress">Обычный</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>E-commerce</td>
+                         <td>6</td>
+                        <td>240.000р.</td>
+                        <td>360ч</td>
+                        <td><span class="status status-progress">Обычный</span></td>
+                    </tr>
+                    <tr>
+                        <td>Строительство и недвижимость</td>
+                        <td>3</td>
+                        <td>506.000р.</td>
+                        <td>380ч</td>
+                        <td><span class="status status-progress">Обычный</span></td>
+                    </tr>
+                    <tr>
+                        <td>Медицина и фармацевтика</td>
+                        <td>2</td>
+                        <td>320.000р.</td>
+                        <td>160ч</td>
+                        <td><span class="status status-support">Мало опыта</span></td>
+                    </tr>
+                        <tr>
+                        <td>Другое</td> 
+                        <td>~</td>
+                        <td>~</td>
+                        <td>300ч</td>
+                        <td><span class="status status-support">Мало опыта</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+<button class="calculator-toggle" id="calculatorToggle" type="button" aria-controls="calculatorWindow" aria-expanded="false" aria-hidden="true">
+    Калькулятор
+</button>
+
+<div class="calculator-wrap" id="calculatorWindow" role="dialog" aria-labelledby="calculatorTitle" hidden>
+    <div class="calculator-header" id="calculatorHeader">
+        <h3 id="calculatorTitle">Калькулятор</h3>
+        <button class="calculator-close" id="calculatorClose" type="button" aria-label="Закрыть калькулятор">×</button>
+    </div>
+    <form class="calculator" id="calculatorForm">
+        <label>
+            Первое число
+            <input type="text" name="firstNumber" inputmode="decimal" autocomplete="off" required>
+        </label>
+        <div class="calculator-operation-field">
+            <span>Операция</span>
+            <div class="calculator-operations" role="radiogroup" aria-label="Выберите операцию">
+                <button class="operation-button is-selected" type="button" data-operation="add" aria-label="Сложение" aria-pressed="true">+</button>
+                <button class="operation-button" type="button" data-operation="subtract" aria-label="Вычитание" aria-pressed="false">−</button>
+                <button class="operation-button" type="button" data-operation="multiply" aria-label="Умножение" aria-pressed="false">×</button>
+                <button class="operation-button" type="button" data-operation="divide" aria-label="Деление" aria-pressed="false">÷</button>
+            </div>
+            <input type="hidden" name="operation" id="calculatorOperation" value="add">
+        </div>
+        <label>
+            Второе число
+            <input type="text" name="secondNumber" inputmode="decimal" autocomplete="off" required>
+        </label>
+        <button class="btn btn-primary" type="submit">Рассчитать</button>
+        <div class="calculator-result-field">
+            <span>Итоговый результат</span>
+            <p class="calculator-result" id="calculatorResult" role="status" aria-live="polite"></p>
+        </div>
+    </form>
+</div>
 
     <section id="contact" class="section section-alt">
         <div class="container">
