@@ -87,6 +87,44 @@ const calculatorWindow = document.getElementById('calculatorWindow');
 const calculatorClose = document.getElementById('calculatorClose');
 const calculatorHeader = document.getElementById('calculatorHeader');
 
+// Переключение представления компетенций
+const skillsTabs = document.querySelectorAll('.skills-tab');
+const skillsPanels = document.querySelectorAll('.skills-panel');
+const skillsTabsWrap = document.querySelector('.skills-tabs');
+const skillsTabIndicator = document.querySelector('.skills-tab-indicator');
+
+const updateSkillsIndicator = () => {
+    const activeTab = document.querySelector('.skills-tab.is-active');
+    if (!activeTab || !skillsTabsWrap || !skillsTabIndicator) return;
+
+    const tabBounds = activeTab.getBoundingClientRect();
+    const tabsBounds = skillsTabsWrap.getBoundingClientRect();
+    skillsTabsWrap.style.setProperty('--indicator-width', `${tabBounds.width}px`);
+    skillsTabsWrap.style.setProperty('--indicator-offset', `${tabBounds.left - tabsBounds.left}px`);
+    skillsTabsWrap.style.setProperty('--indicator-y', `${tabBounds.bottom - tabsBounds.top - 3}px`);
+};
+
+skillsTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        skillsTabs.forEach(currentTab => {
+            const isSelected = currentTab === tab;
+            currentTab.classList.toggle('is-active', isSelected);
+            currentTab.setAttribute('aria-selected', String(isSelected));
+        });
+
+        skillsPanels.forEach(panel => {
+            const isSelected = panel.id === tab.dataset.panel;
+            panel.classList.toggle('is-active', isSelected);
+            panel.hidden = !isSelected;
+        });
+
+        updateSkillsIndicator();
+    });
+});
+
+updateSkillsIndicator();
+window.addEventListener('resize', updateSkillsIndicator);
+
 const parseCalculatorNumber = value => {
     const normalizedValue = String(value || '').trim().replace(/[.,\s\u00a0]/g, '');
     return normalizedValue ? Number(normalizedValue) : NaN;
@@ -211,7 +249,7 @@ operationButtons.forEach(button => {
 });
 
 // Показываем кнопку только во время просмотра таблицы
-const experienceTable = document.querySelector('.table-wrap');
+const experienceTable = document.querySelector('.experience-table-wrap');
 
 if (experienceTable && calculatorToggle && calculatorWindow) {
     let isTableVisible = false;

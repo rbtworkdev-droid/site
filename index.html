@@ -108,31 +108,88 @@
 
     <section id="skills" class="section section-alt">
         <div class="container">
-            <h2 class="section-title">Компетенции</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <h3>Presale</h3>
-                    <p>Знакомство, демонстрация функционала, КП с оценкой</p>
+            <div class="skills-tabs" role="tablist" aria-label="Профиль компетенций">
+                <button class="skills-tab is-active" id="skillsTab" type="button" role="tab" aria-selected="true" aria-controls="skillsPanel" data-panel="skillsPanel">
+                    Компетенции
+                </button>
+                <button class="skills-tab" id="stackTab" type="button" role="tab" aria-selected="false" aria-controls="stackPanel" data-panel="stackPanel">
+                    Технологический стек
+                </button>
+                <button class="skills-tab" id="documentationTab" type="button" role="tab" aria-selected="false" aria-controls="documentationPanel" data-panel="documentationPanel">
+                    Проектная документация
+                </button>
+                <span class="skills-tab-indicator" aria-hidden="true"></span>
+            </div>
+            <div class="skills-panels">
+                <div class="skills-panel is-active" id="skillsPanel" role="tabpanel" aria-labelledby="skillsTab">
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <h3>Presale</h3>
+                            <p>Знакомство, демонстрация функционала, КП с оценкой</p>
+                        </div>
+                        <div class="skill-card">
+                            <h3>Аналитика</h3>
+                            <p>Встречи, формализация ТЗ, доработка и защита</p>
+                        </div>
+                        <div class="skill-card">
+                            <h3>Внедрение</h3>
+                            <p>Реализация ТЗ, проектное управление командой</p>
+                        </div>
+                        <div class="skill-card">
+                            <h3>Обучение</h3>
+                            <p>Создание документации и обучение сотрудников</p>
+                        </div>
+                        <div class="skill-card">
+                            <h3>Сопровождение</h3>
+                            <p>Общение в чатах, поддержание связи с сотрудниками</p>
+                        </div>
+                        <div class="skill-card">
+                            <h3>Допродажа</h3>
+                            <p>Доработки после внедрения, кастомные решения</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="skill-card">
-                    <h3>Аналитика</h3>
-                    <p>Встречи, формализация ТЗ, доработка и защита</p>
+                <div class="skills-panel" id="stackPanel" role="tabpanel" aria-labelledby="stackTab" hidden>
+                    <div class="table-wrap skills-table-wrap">
+                        <table class="styled-table skills-table">
+                            <thead>
+                                <tr>
+                                    <th>Технология</th>
+                                    <th>Уровень компетенции</th>
+                                    <th>Комментарий</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Битрикс24</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>BPMN / draw.io</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>REST API</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>JavaScript</td><td><span class="status status-progress">Рабочий</span></td><td></td></tr>
+                                <tr><td>Excel</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>Obsidian</td><td><span class="status status-progress">Рабочий</span></td><td></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="skill-card">
-                    <h3>Внедрение</h3>
-                    <p>Реализация ТЗ, проектное управление командой</p>
-                </div>
-                <div class="skill-card">
-                    <h3>Обучение</h3>
-                    <p>Создание документации и обучение сотрудников</p>
-                </div>
-                <div class="skill-card">
-                    <h3>Сопровождение</h3>
-                    <p>Общение в чатах, поддержание связи с сотрудниками</p>
-                </div>
-                <div class="skill-card">
-                    <h3>Допродажа</h3>
-                    <p>Доработки после внедрения, кастомные решения</p>
+                <div class="skills-panel" id="documentationPanel" role="tabpanel" aria-labelledby="documentationTab" hidden>
+                    <div class="table-wrap skills-table-wrap">
+                        <table class="styled-table skills-table">
+                            <thead>
+                                <tr>
+                                    <th>Технология</th>
+                                    <th>Уровень компетенции</th>
+                                    <th>Комментарий</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Битрикс24</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>BPMN / draw.io</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>REST API</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>JavaScript</td><td><span class="status status-progress">Рабочий</span></td><td></td></tr>
+                                <tr><td>Excel</td><td><span class="status status-done">Продвинутый</span></td><td></td></tr>
+                                <tr><td>Obsidian</td><td><span class="status status-progress">Рабочий</span></td><td></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -162,7 +219,7 @@
             Сводка по опыту в разных отраслях, колличеству проектов, средней стоимости и общему объёму выполненных работ в часах, общая оценка компетенций.
         </p>
 
-        <div class="table-wrap">
+        <div class="table-wrap experience-table-wrap">
             <table class="styled-table">
                 <thead>
                     <tr>
