@@ -92,6 +92,7 @@ const skillsTabs = document.querySelectorAll('.skills-tab');
 const skillsPanels = document.querySelectorAll('.skills-panel');
 const skillsTabsWrap = document.querySelector('.skills-tabs');
 const skillsTabIndicator = document.querySelector('.skills-tab-indicator');
+const skillsSection = document.getElementById('skills');
 
 const devtoolsButton = document.getElementById('devtoolsButton');
 if (devtoolsButton) {
@@ -148,6 +149,7 @@ skillsTabs.forEach(tab => {
         });
 
         updateSkillsIndicator();
+        skillsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 });
 

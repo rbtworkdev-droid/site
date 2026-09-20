@@ -315,31 +315,36 @@
     <section id="contact" class="section section-alt">
         <div class="container">
             <h2 class="section-title">Контакты</h2>
-            <p class="contact-text">Не всегда могу отвечать на звонки в течение дня, поэтому пишите в чате <a  class="hero-resume-link" href="https://spb.hh.ru/resume/7fce27c6ff0e0b1d760039ed1f6f4542306c43" target="_blank" rel="noopener noreferrer">hh.ru</a> или телеграмме</p>
-            <div class="contact-links">
-                <a href="mailto:rbtwork.dev@yandx.ru" class="contact-link">📧 rbtwork.dev@yandx.ru</a>
-                <a href="tel:+79213924714" class="contact-link">📞 +7(921)392-47-14</a>
-                <a href="https://t.me/Andrey_UPT" target="_blank" class="contact-link">✈️ Telegram</a>
-            </div>
-            <div class="deal-form-wrap">
-                <h3>Создать сделку через REST API</h3>
-                <p class="deal-form-description">Заполните данные, что бы новая сделка появилась на моём портале Битрикс24. Я не слежу за обращениями, которые туда поступают.</p>
-                <form id="dealForm" class="deal-form">
-                    <label>
-                        Ваше имя
-                        <input type="text" name="name" autocomplete="name" required>
-                    </label>
-                    <label>
-                        Телефон или e-mail
-                        <input type="text" name="contact" autocomplete="email" required>
-                    </label>
-                    <label>
-                        Комментарий
-                        <textarea name="comment" rows="3" placeholder="Коротко опишите задачу"></textarea>
-                    </label>
-                    <button class="btn btn-primary" type="submit" id="createDealBtn">Создать сделку</button>
-                    <p class="deal-form-status" id="dealFormStatus" role="status" aria-live="polite"></p>
-                </form>
+            <div class="contact-layout">
+                <div class="contact-info">
+                    <p class="contact-text">Не всегда могу отвечать на звонки в течение дня, поэтому пишите в чате <a class="hero-resume-link" href="https://spb.hh.ru/resume/7fce27c6ff0e0b1d760039ed1f6f4542306c43" target="_blank" rel="noopener noreferrer">hh.ru</a> или телеграмме</p>
+                    <div class="contact-links">
+                        <a href="mailto:rbtwork.dev@yandex.ru" class="contact-link">📧 rbtwork.dev@yandex.ru</a>
+                        <a href="tel:+79213924714" class="contact-link">📞 +7(921)392-47-14</a>
+                        <a href="https://t.me/Andrey_UPT" target="_blank" class="contact-link">✈️ Telegram</a>
+                    </div>
+                </div>
+
+                <div class="deal-form-wrap">
+                    <h3>Создать сделку через REST API</h3>
+                    <p class="deal-form-description">Заполните данные, что бы новая сделка появилась на моём портале Битрикс24. Я не слежу за обращениями, которые туда поступают.</p>
+                    <form id="dealForm" class="deal-form">
+                        <label>
+                            Ваше имя
+                            <input type="text" name="name" autocomplete="name" required>
+                        </label>
+                        <label>
+                            Телефон или e-mail
+                            <input type="text" name="contact" autocomplete="email" required>
+                        </label>
+                        <label>
+                            Комментарий
+                            <textarea name="comment" rows="3" placeholder="Коротко опишите задачу"></textarea>
+                        </label>
+                        <button class="btn btn-primary" type="submit" id="createDealBtn">Создать сделку</button>
+                        <p class="deal-form-status" id="dealFormStatus" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
