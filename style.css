@@ -393,8 +393,7 @@ body::-webkit-scrollbar {
     width: 48%;
 }
 
-.skills-table th:last-child,
-.skills-table td:last-child {
+.skills-table th:last-child {
     text-align: right;
 }
 
@@ -415,6 +414,11 @@ body::-webkit-scrollbar {
 .skills-panel.is-active .skills-table tbody tr:nth-child(4) { animation-delay: 0.15s; }
 .skills-panel.is-active .skills-table tbody tr:nth-child(5) { animation-delay: 0.2s; }
 .skills-panel.is-active .skills-table tbody tr:nth-child(6) { animation-delay: 0.25s; }
+.skills-panel.is-active .skills-table tbody tr:nth-child(7) { animation-delay: 0.3s; }
+.skills-panel.is-active .skills-table tbody tr:nth-child(8) { animation-delay: 0.35s; }
+.skills-panel.is-active .skills-table tbody tr:nth-child(9) { animation-delay: 0.4s; }
+.skills-panel.is-active .skills-table tbody tr:nth-child(10) { animation-delay: 0.45s; }
+.skills-panel.is-active .skills-table tbody tr:nth-child(11) { animation-delay: 0.5s; }
 
 .skills-grid {
     display: grid;
@@ -1117,6 +1121,37 @@ body::-webkit-scrollbar {
 .styled-table th:nth-child(n+2):nth-child(-n+4),
 .styled-table td:nth-child(n+2):nth-child(-n+4) {
     text-align: center;
+}
+
+.styled-table.skills-table tbody td:nth-child(3) {
+    text-align: left;
+}
+
+.styled-table.skills-table tbody td.compact-comment {
+    line-height: 1.2;
+}
+
+.comment-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.devtools-button {
+    padding: 4px 9px;
+    border: 1px solid var(--accent);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--accent-2);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.devtools-button:hover,
+.devtools-button:focus-visible {
+    background: rgba(199, 139, 74, 0.15);
 }
 
 .styled-table thead th + th,

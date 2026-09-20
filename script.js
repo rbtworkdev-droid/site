@@ -93,6 +93,20 @@ const skillsPanels = document.querySelectorAll('.skills-panel');
 const skillsTabsWrap = document.querySelector('.skills-tabs');
 const skillsTabIndicator = document.querySelector('.skills-tab-indicator');
 
+const devtoolsButton = document.getElementById('devtoolsButton');
+if (devtoolsButton) {
+    devtoolsButton.addEventListener('click', () => {
+        window.dispatchEvent(new KeyboardEvent('keydown', {
+            key: 'F12',
+            code: 'F12',
+            keyCode: 123,
+            which: 123,
+            bubbles: true,
+        }));
+        devtoolsButton.textContent = 'Нажмите F12';
+    });
+}
+
 const updateSkillsIndicator = () => {
     const activeTab = document.querySelector('.skills-tab.is-active');
     if (!activeTab || !skillsTabsWrap || !skillsTabIndicator) return;
@@ -114,8 +128,23 @@ skillsTabs.forEach(tab => {
 
         skillsPanels.forEach(panel => {
             const isSelected = panel.id === tab.dataset.panel;
-            panel.classList.toggle('is-active', isSelected);
-            panel.hidden = !isSelected;
+
+            if (!isSelected) {
+                panel.classList.remove('is-active');
+                panel.hidden = true;
+                return;
+            }
+
+            panel.hidden = false;
+            requestAnimationFrame(() => {
+                panel.classList.add('is-active');
+
+                panel.querySelectorAll('tbody tr').forEach(row => {
+                    row.style.animation = 'none';
+                    row.offsetHeight;
+                    row.style.animation = '';
+                });
+            });
         });
 
         updateSkillsIndicator();
@@ -452,6 +481,18 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
     let animationId = 0;
     let lastFrame = 0;
     const frameInterval = 1000 / 30;
+    const MAX_STREAM_SPEED = 2.4;
+
+    const limitVelocity = (vx, vy, maxSpeed = MAX_STREAM_SPEED) => {
+        const speed = Math.hypot(vx, vy);
+        if (!Number.isFinite(speed) || speed <= maxSpeed) return { vx, vy };
+
+        const scale = maxSpeed / speed;
+        return {
+            vx: vx * scale,
+            vy: vy * scale,
+        };
+    };
 
     // Палитра — тянем из CSS-переменных
     const css = getComputedStyle(document.documentElement);
@@ -631,8 +672,15 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
                     // Мягкое отталкивание через targetY, чтобы дорожки не «телепортировались».
                     first.targetY += push * direction;
                     second.targetY -= push * direction;
-                    first.vy += direction * 0.06;
-                    second.vy -= direction * 0.06;
+                    first.vy += direction * 0.16;
+                    second.vy -= direction * 0.16;
+
+                    const firstLimited = limitVelocity(first.vx, first.vy);
+                    const secondLimited = limitVelocity(second.vx, second.vy);
+                    first.vx = firstLimited.vx;
+                    first.vy = firstLimited.vy;
+                    second.vx = secondLimited.vx;
+                    second.vy = secondLimited.vy;
                 }
             }
         }
@@ -758,6 +806,11 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
             // мягкое смещение и дрейф всей дорожки
             s.vx *= 0.985;
             s.vy *= 0.965;
+
+            const limitedVelocity = limitVelocity(s.vx, s.vy, MAX_STREAM_SPEED);
+            s.vx = limitedVelocity.vx;
+            s.vy = limitedVelocity.vy;
+
             s.x += s.vx * 60 * dt;
             s.y += (s.targetY - s.y) * 0.08;
             s.y += s.vy * 60 * dt;
