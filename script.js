@@ -970,7 +970,7 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
 */
 const PROJECTS = [
     {
-        hours: "300ч+",
+        hours: "400ч+",
         image: "beton.jpeg",
         alt: "Производитель бетона",
         title: "Производитель бетона",
