@@ -562,6 +562,7 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
     let lastFrame = 0;
     const frameInterval = 1000 / 30;
     const MAX_STREAM_SPEED = 2.4;
+    const STREAM_INSTABILITY_LIMIT = 0.65;
 
     const limitVelocity = (vx, vy, maxSpeed = MAX_STREAM_SPEED) => {
         const speed = Math.hypot(vx, vy);
@@ -704,6 +705,8 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
             vx: rand(-0.06, 0.06),
             vy: rand(-0.05, 0.05),
             alpha: rand(0.16, 0.27),                            // общая прозрачность
+            instability: 0,
+            isFading: false,
             scale: rand(0.82, 1.08),
             phase: Math.random() * Math.PI * 2,
             breatheSpeed: rand(0.25, 0.45),
@@ -755,6 +758,11 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
                     first.vy += direction * 0.16;
                     second.vy -= direction * 0.16;
 
+                    const unstableStream = Math.abs(first.vy) >= Math.abs(second.vy)
+                        ? first
+                        : second;
+                    unstableStream.instability += 0.012;
+
                     const firstLimited = limitVelocity(first.vx, first.vy);
                     const secondLimited = limitVelocity(second.vx, second.vy);
                     first.vx = firstLimited.vx;
@@ -768,8 +776,8 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
 
     function buildScene() {
         // Больше дорожек и узлов создают плотный слой схемы на фоне.
-        const density = (W * H) / 170000;
-        const count = Math.max(5, Math.min(10, Math.round(density)));
+        const density = (W * H) / 255000;
+        const count = Math.max(3, Math.min(7, Math.round(density)));
         streams = Array.from({ length: count }, () => makeStream(true));
         separateStreams();
     }
@@ -886,6 +894,15 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
             // мягкое смещение и дрейф всей дорожки
             s.vx *= 0.985;
             s.vy *= 0.965;
+            s.instability = Math.max(0, s.instability - dt * 0.012);
+
+            if (s.instability >= STREAM_INSTABILITY_LIMIT) {
+                s.isFading = true;
+            }
+
+            if (s.isFading) {
+                s.alpha = Math.max(0, s.alpha - dt * 0.24);
+            }
 
             const limitedVelocity = limitVelocity(s.vx, s.vy, MAX_STREAM_SPEED);
             s.vx = limitedVelocity.vx;
@@ -990,6 +1007,8 @@ if (hero && heroAvatar && !window.matchMedia('(prefers-reduced-motion: reduce)')
 
             ctx.restore();
         }
+
+        streams = streams.filter(stream => stream.alpha > 0.01);
 
         if (animate) animationId = requestAnimationFrame(frame);
     }
