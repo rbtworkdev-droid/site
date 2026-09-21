@@ -93,6 +93,51 @@ const skillsPanels = document.querySelectorAll('.skills-panel');
 const skillsTabsWrap = document.querySelector('.skills-tabs');
 const skillsTabIndicator = document.querySelector('.skills-tab-indicator');
 const skillsSection = document.getElementById('skills');
+const bitrixModulesAll = document.querySelector('.bitrix-modules-all');
+const modulesPanel = document.getElementById('modulesPanel');
+const moduleNotificationDot = document.querySelector('.module-notification-dot');
+const modulesNoticeStorageKey = 'bitrix24-modules-notice-dismissed';
+
+const dismissModulesNotice = () => {
+    moduleNotificationDot?.classList.add('is-hidden');
+
+    try {
+        window.localStorage.setItem(modulesNoticeStorageKey, 'true');
+    } catch {
+    }
+};
+
+try {
+    if (window.localStorage.getItem(modulesNoticeStorageKey) === 'true') {
+        moduleNotificationDot?.classList.add('is-hidden');
+    }
+} catch {
+}
+
+const launchConfetti = (isDelayed = false) => {
+    if (!bitrixModulesAll) return;
+
+    const pieceCount = isDelayed ? 42 : 28;
+    const distanceStart = isDelayed ? 180 : 100;
+    const distanceRange = isDelayed ? 180 : 170;
+    const confettiColors = ['#ffffff', '#ffd166', '#ff4d6d', '#00f5d4', '#7cff6b', '#7aa2ff'];
+
+    for (let index = 0; index < pieceCount; index += 1) {
+        const piece = document.createElement('span');
+        const angle = (Math.PI * 2 * index) / pieceCount + (Math.random() - 0.5) * 0.3;
+        const distance = distanceStart + Math.random() * distanceRange;
+
+        piece.className = `confetti-piece${isDelayed ? ' is-delayed' : ''}`;
+        piece.style.setProperty('--confetti-color', confettiColors[index % confettiColors.length]);
+        piece.style.setProperty('--confetti-x', `${Math.cos(angle) * distance}px`);
+        piece.style.setProperty('--confetti-y', `${Math.sin(angle) * distance}px`);
+        piece.style.setProperty('--confetti-gravity', `${100 + Math.random() * 130}px`);
+        piece.style.setProperty('--confetti-rotation', `${Math.round(Math.random() * 720 - 360)}deg`);
+        piece.style.animationDelay = `${Math.random() * (isDelayed ? 220 : 120)}ms`;
+        bitrixModulesAll.append(piece);
+        piece.addEventListener('animationend', () => piece.remove(), { once: true });
+    }
+}
 
 const devtoolsButton = document.getElementById('devtoolsButton');
 if (devtoolsButton) {
@@ -147,6 +192,11 @@ skillsTabs.forEach(tab => {
                 });
             });
         });
+
+        if (tab.dataset.panel === modulesPanel?.id) {
+            dismissModulesNotice();
+            window.setTimeout(() => launchConfetti(true), 1000);
+        }
 
         updateSkillsIndicator();
         skillsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
