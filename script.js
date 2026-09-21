@@ -97,6 +97,8 @@ const bitrixModulesAll = document.querySelector('.bitrix-modules-all');
 const modulesPanel = document.getElementById('modulesPanel');
 const moduleNotificationDot = document.querySelector('.module-notification-dot');
 const modulesNoticeStorageKey = 'bitrix24-modules-notice-dismissed';
+let delayedConfettiTimer = null;
+let confettiCooldownUntil = 0;
 
 const dismissModulesNotice = () => {
     moduleNotificationDot?.classList.add('is-hidden');
@@ -116,6 +118,11 @@ try {
 
 const launchConfetti = (isDelayed = false) => {
     if (!bitrixModulesAll) return;
+
+    if (isDelayed) {
+        if (Date.now() < confettiCooldownUntil) return;
+        confettiCooldownUntil = Date.now() + 2500;
+    }
 
     const pieceCount = isDelayed ? 42 : 28;
     const distanceStart = isDelayed ? 180 : 100;
@@ -138,6 +145,23 @@ const launchConfetti = (isDelayed = false) => {
         piece.addEventListener('animationend', () => piece.remove(), { once: true });
     }
 }
+
+const scheduleDelayedConfetti = () => {
+    if (delayedConfettiTimer || Date.now() < confettiCooldownUntil) return;
+
+    delayedConfettiTimer = window.setTimeout(() => {
+        delayedConfettiTimer = null;
+        if (modulesPanel?.hidden) return;
+        launchConfetti(true);
+    }, 1000);
+};
+
+const cancelDelayedConfetti = () => {
+    if (delayedConfettiTimer === null) return;
+
+    window.clearTimeout(delayedConfettiTimer);
+    delayedConfettiTimer = null;
+};
 
 const devtoolsButton = document.getElementById('devtoolsButton');
 if (devtoolsButton) {
@@ -166,6 +190,10 @@ const updateSkillsIndicator = () => {
 
 skillsTabs.forEach(tab => {
     tab.addEventListener('click', () => {
+        if (tab.dataset.panel !== modulesPanel?.id) {
+            cancelDelayedConfetti();
+        }
+
         skillsTabs.forEach(currentTab => {
             const isSelected = currentTab === tab;
             currentTab.classList.toggle('is-active', isSelected);
@@ -195,7 +223,7 @@ skillsTabs.forEach(tab => {
 
         if (tab.dataset.panel === modulesPanel?.id) {
             dismissModulesNotice();
-            window.setTimeout(() => launchConfetti(true), 1000);
+            scheduleDelayedConfetti();
         }
 
         updateSkillsIndicator();
