@@ -24,7 +24,7 @@ if (burger && navLinks) {
 const sectionTracker = document.getElementById('sectionTracker');
 const trackedSections = [
     document.querySelector('.hero'),
-    ...['about', 'skills', 'projects', 'experience', 'contact']
+    ...['about', 'skills', 'projects', 'experience', 'roadmap', 'contact']
         .map(sectionId => document.getElementById(sectionId)),
 ].filter(Boolean);
 
@@ -497,12 +497,44 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.skill-card, .project-card').forEach(el => {
+document.querySelectorAll('.skill-card, .project-card, .roadmap-reveal').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
 });
+
+// Полноэкранное превью изображения roadmap
+const roadmapPreviewModal = document.getElementById('roadmapPreviewModal');
+const roadmapPreviewOpen = document.getElementById('roadmapPreviewOpen');
+const roadmapPreviewClose = document.getElementById('roadmapPreviewClose');
+const roadmapPreviewCloseTargets = roadmapPreviewModal?.querySelectorAll('[data-roadmap-preview-close]') || [];
+
+const closeRoadmapPreview = () => {
+    if (!roadmapPreviewModal) return;
+
+    roadmapPreviewModal.hidden = true;
+    document.body.style.overflow = '';
+    roadmapPreviewOpen?.focus();
+};
+
+if (roadmapPreviewModal && roadmapPreviewOpen && roadmapPreviewClose) {
+    roadmapPreviewOpen.addEventListener('click', () => {
+        roadmapPreviewModal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        roadmapPreviewClose.focus();
+    });
+
+    roadmapPreviewCloseTargets.forEach(target => {
+        target.addEventListener('click', closeRoadmapPreview);
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !roadmapPreviewModal.hidden) {
+            closeRoadmapPreview();
+        }
+    });
+}
 
 // Лёгкое движение аватара в сторону, противоположную курсору
 const hero = document.querySelector('.hero');

@@ -24,6 +24,7 @@
     <link rel="canonical" href="https://rbtworkdev-droid.github.io/site/">
     <link rel="icon" type="image/x-icon" href="https://hh.ru/favicon.ico">
     <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -36,6 +37,7 @@
         <button class="section-dot" type="button" data-target="skills" aria-label="Компетенции" aria-current="false"></button>
         <button class="section-dot" type="button" data-target="projects" aria-label="Кейсы" aria-current="false"></button>
         <button class="section-dot" type="button" data-target="experience" aria-label="Опыт по проектам" aria-current="false"></button>
+        <button class="section-dot" type="button" data-target="roadmap" aria-label="Roadmap специалиста" aria-current="false"></button>
         <button class="section-dot" type="button" data-target="contact" aria-label="Контакты" aria-current="false"></button>
     </nav>
     <header class="header">
@@ -45,6 +47,7 @@
                 <li><a href="#about">Обо мне</a></li>
                 <li><a href="#skills">Компетенции</a></li>
                 <li><a href="#projects">Кейсы</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
                 <li><a href="#contact">Контакты</a></li>
             </ul>
             <button class="burger" aria-label="Меню">
@@ -274,6 +277,47 @@
 
     </div>
 </section>
+
+<section id="roadmap" class="section">
+    <div class="container">
+        <h2 class="section-title">Мой план развития</h2>
+        <div class="roadmap-layout">
+            <div class="roadmap-visual roadmap-reveal">
+                <img src="image_2026-09-21_21-04-11.png" alt="Визуальная схема roadmap специалиста">
+                <button class="roadmap-preview-button" id="roadmapPreviewOpen" type="button" aria-label="Открыть превью roadmap на весь экран">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                </button>
+                <p class="roadmap-annotation">От формализации технических заданий для софта к комлпексной аналитике процессов и работа на цифры</p>
+            </div>
+            <div class="roadmap-content roadmap-reveal">
+                <p class="roadmap-lead">Характеристики хорошего аналитика из ~2030 года</p>
+                <ol class="roadmap-list">
+                    <li>
+                        <span class="roadmap-step">01</span>
+                        <div><h3>Более крупные проекты</h3><p>Увеличение "глубины" необходимой проектной документации. Проектирование сложных систем с множеством вариативных процессов</p></div>
+                    </li>
+                    <li>
+                        <span class="roadmap-step">02</span>
+                        <div><h3>Понимание метрик</h3><p>Работа в направлении маркетинга и внутренних метрик компании. Ясное понимание методов увеличения этих показателей в различных отраслях</p></div>
+                    </li>
+                    <li>
+                        <span class="roadmap-step">03</span>
+                        <div><h3>LLM</h3><p>Использование больших языковых моделей для устранения всей не узкоспециализированной работы в регулярных процессах компании</p></div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="roadmap-preview-modal" id="roadmapPreviewModal" role="dialog" aria-modal="true" aria-labelledby="roadmapPreviewTitle" hidden>
+    <div class="roadmap-preview-backdrop" data-roadmap-preview-close></div>
+    <div class="roadmap-preview-window">
+        <h2 id="roadmapPreviewTitle" class="visually-hidden">Превью roadmap специалиста</h2>
+        <img src="image_2026-09-21_21-04-11.png" alt="Визуальная схема roadmap специалиста">
+        <button class="roadmap-preview-close" id="roadmapPreviewClose" type="button" data-roadmap-preview-close>Закрыть</button>
+    </div>
+</div>
 
 <button class="calculator-toggle" id="calculatorToggle" type="button" aria-controls="calculatorWindow" aria-expanded="false" aria-hidden="true">
     Калькулятор
