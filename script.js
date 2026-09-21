@@ -433,9 +433,31 @@ if (calculatorHeader && calculatorWindow) {
 const dealForm = document.getElementById('dealForm');
 const createDealBtn = document.getElementById('createDealBtn');
 const dealFormStatus = document.getElementById('dealFormStatus');
+const dealNameInput = dealForm?.querySelector('input[name="name"]');
+const dealFormWarning = dealForm?.closest('.deal-form-wrap')?.querySelector('.deal-form-warning');
 const bitrixWebhookUrl = 'https://b24-od3dd2.bitrix24.ru/rest/1/ob14ff7ksm9lv0rw/';
 
 if (dealForm && createDealBtn && dealFormStatus) {
+    let warningAnimationStarted = false;
+
+    dealNameInput?.addEventListener('input', () => {
+        if (warningAnimationStarted || !dealNameInput.value.trim() || !dealFormWarning) return;
+
+        warningAnimationStarted = true;
+        const highlightWarning = cycle => {
+            window.setTimeout(() => {
+                dealFormWarning.classList.add('is-highlighted');
+                window.setTimeout(() => {
+                    dealFormWarning.classList.remove('is-highlighted');
+
+                    if (cycle < 2) highlightWarning(cycle + 1);
+                }, 2000);
+            }, 1000);
+        };
+
+        highlightWarning(1);
+    });
+
     dealForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(dealForm);

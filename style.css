@@ -1029,6 +1029,15 @@ body::-webkit-scrollbar {
     color: var(--text-muted);
 }
 
+.deal-form-warning {
+    transition: color 0.8s ease-in-out, text-shadow 0.8s ease-in-out;
+}
+
+.deal-form-warning.is-highlighted {
+    color: #ff4d4d;
+    text-shadow: 0 0 12px rgba(255, 77, 109, 0.45);
+}
+
 .deal-form {
     display: grid;
     gap: 16px;
