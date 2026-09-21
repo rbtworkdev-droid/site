@@ -1034,7 +1034,7 @@ body::-webkit-scrollbar {
 }
 
 .deal-form-warning.is-highlighted {
-    color: #ff4d4d;
+    color: #ff2f2f;
     text-shadow: 0 0 12px rgba(255, 77, 109, 0.45);
 }
 
