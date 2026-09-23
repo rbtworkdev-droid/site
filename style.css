@@ -549,26 +549,6 @@ body::-webkit-scrollbar {
     outline-offset: 5px;
 }
 
-.module-notification-dot {
-    position: absolute;
-    top: -9px;
-    right: -7px;
-    width: 10px;
-    height: 10px;
-    border: 2px solid var(--bg-alt);
-    border-radius: 50%;
-    background: #e34b4b;
-    box-shadow: 0 0 10px rgba(227, 75, 75, 0.7);
-    transform: translate(0, 0);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.module-notification-dot.is-hidden {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-    pointer-events: none;
-}
-
 .skills-tab-indicator {
     position: absolute;
     left: 0;
@@ -626,71 +606,6 @@ body::-webkit-scrollbar {
 
 .skills-table th:last-child {
     text-align: right;
-}
-
-.bitrix-modules-all {
-    position: relative;
-    isolation: isolate;
-    overflow: visible;
-    display: grid;
-    min-height: 270px;
-    place-items: center;
-    user-select: none;
-    -webkit-user-select: none;
-    border: 1px solid rgba(125, 211, 142, 0.55);
-    border-radius: 8px;
-    background: linear-gradient(135deg, #1d6b3b, #3c9b5b);
-    box-shadow: 0 18px 40px rgba(29, 107, 59, 0.22);
-    color: #f0fff2;
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-shadow: 0 3px 14px rgba(10, 48, 25, 0.35);
-}
-
-.bitrix-modules-all::after {
-    position: absolute;
-    inset: 12px;
-    z-index: -1;
-    border: 1px solid rgba(240, 255, 242, 0.16);
-    border-radius: 5px;
-    content: '';
-    pointer-events: none;
-}
-
-.confetti-piece {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 2;
-    width: 7px;
-    height: 13px;
-    border-radius: 1px;
-    background: var(--confetti-color);
-    pointer-events: none;
-    animation: confetti-burst 900ms cubic-bezier(0.18, 0.75, 0.35, 1) forwards;
-}
-
-.confetti-piece.is-delayed {
-    width: 9px;
-    height: 17px;
-    animation-duration: 1800ms;
-    box-shadow: 0 0 12px var(--confetti-color);
-}
-
-@keyframes confetti-burst {
-    0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(0deg) scale(0.7);
-    }
-    45% {
-        opacity: 1;
-        transform: translate(calc(-50% + var(--confetti-x) * 0.55), calc(-50% + var(--confetti-y) * 0.35)) rotate(var(--confetti-rotation)) scale(1.1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(calc(-50% + var(--confetti-x)), calc(-50% + var(--confetti-y) + var(--confetti-gravity))) rotate(var(--confetti-rotation)) scale(0.85);
-    }
 }
 
 .skills-panel .skills-table tbody tr {
