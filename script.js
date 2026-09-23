@@ -1,6 +1,45 @@
 // Год в футере
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Показываем статус, если пользователь переключился на другую вкладку.
+const pageVisibilityNotice = document.getElementById('pageVisibilityNotice');
+const pageVisibilityMessage = document.getElementById('pageVisibilityMessage');
+let wasPageInactive = false;
+let pageVisibilityTimer;
+
+const showPageVisibilityNotice = message => {
+    if (!pageVisibilityNotice || !pageVisibilityMessage) return;
+
+    pageVisibilityMessage.textContent = message;
+    pageVisibilityNotice.classList.add('is-visible');
+    pageVisibilityNotice.setAttribute('aria-hidden', 'false');
+    clearTimeout(pageVisibilityTimer);
+};
+
+const hidePageVisibilityNotice = () => {
+    if (!pageVisibilityNotice) return;
+
+    pageVisibilityNotice.classList.remove('is-visible');
+    pageVisibilityNotice.setAttribute('aria-hidden', 'true');
+};
+
+const updatePageVisibility = () => {
+    if (document.visibilityState === 'hidden') {
+        wasPageInactive = true;
+        showPageVisibilityNotice('Страница неактивна');
+        return;
+    }
+
+    if (!wasPageInactive) return;
+
+    wasPageInactive = false;
+    showPageVisibilityNotice('Страница была неактивна');
+    pageVisibilityTimer = window.setTimeout(hidePageVisibilityNotice, 3500);
+};
+
+document.addEventListener('visibilitychange', updatePageVisibility);
+updatePageVisibility();
+
 // Логотип: возвращаемся наверх без ломки страницы и без пустого хэша
 const logo = document.querySelector('.logo');
 if (logo) {

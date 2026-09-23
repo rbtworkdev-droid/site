@@ -1210,6 +1210,41 @@ body::-webkit-scrollbar {
     border-top: 1px solid var(--border);
 }
 
+.page-visibility-notice {
+    position: fixed;
+    right: 24px;
+    top: 94px;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 13px 17px;
+    border: 1px solid rgba(199, 139, 74, 0.55);
+    border-radius: 8px;
+    background: rgba(46, 31, 21, 0.96);
+    color: var(--text);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32), 0 0 18px rgba(199, 139, 74, 0.14);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.page-visibility-notice.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-visibility-indicator {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(199, 139, 74, 0.14);
+}
+
 
 /* Mobile */
 @media (max-width: 768px) {
@@ -1516,6 +1551,11 @@ body::-webkit-scrollbar {
 
 /* ===== Мобильная адаптация ===== */
 @media (max-width: 768px) {
+    .page-visibility-notice {
+        right: 16px;
+        top: 86px;
+    }
+
     .table-wrap {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
