@@ -39,13 +39,14 @@ export default {
             return jsonResponse({ error: 'Rate limit exceeded' }, 429, origin);
         }
 
+        const telegramDisplayOffsetMs = 3 * 60 * 1000;
         const formatTelegramTime = timestamp => new Intl.DateTimeFormat('ru-RU', {
             timeZone: 'Europe/Moscow',
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
             hourCycle: 'h23',
-        }).format(timestamp);
+        }).format(new Date(timestamp.getTime() + telegramDisplayOffsetMs));
         const formatNotification = timestamp => `🔔Новый посетитель в ${formatTelegramTime(timestamp)}\n${'\u00a0'.repeat(44)}----`;
         const sentAt = new Date();
 
