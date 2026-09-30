@@ -39,28 +39,54 @@ export default {
             return jsonResponse({ error: 'Rate limit exceeded' }, 429, origin);
         }
 
-        const sentAt = new Intl.DateTimeFormat('ru-RU', {
+        const formatTelegramTime = timestamp => new Intl.DateTimeFormat('ru-RU', {
             timeZone: 'Europe/Moscow',
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
             hourCycle: 'h23',
-        }).format(new Date());
+        }).format(timestamp);
+        const formatNotification = timestamp => `🔔Новый посетитель в ${formatTelegramTime(timestamp)}\n${'\u00a0'.repeat(44)}----`;
+        const sentAt = new Date();
 
         const telegramResponse = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: env.TELEGRAM_CHAT_ID,
-                text: `🔔Новый посетитель в ${sentAt}\n----`,
+                text: formatNotification(sentAt),
             }),
         });
 
-        if (!telegramResponse.ok) {
+        let telegramResult;
+        try {
+            telegramResult = await telegramResponse.json();
+        } catch {
             return jsonResponse({ error: 'Telegram delivery failed' }, 502, origin);
+        }
+
+        if (!telegramResponse.ok || !telegramResult.ok) {
+            return jsonResponse({ error: 'Telegram delivery failed' }, 502, origin);
+        }
+
+        const telegramMessage = telegramResult.result;
+        if (Number.isFinite(telegramMessage?.date)) {
+            const telegramTime = new Date(telegramMessage.date * 1000);
+            if (formatTelegramTime(telegramTime) !== formatTelegramTime(sentAt)) {
+                const correctionResponse = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: env.TELEGRAM_CHAT_ID,
+                        message_id: telegramMessage.message_id,
+                        text: formatNotification(telegramTime),
+                    }),
+                });
+
+                if (!correctionResponse.ok) {
+                    console.error('Failed to synchronize visitor notification time with Telegram.');
+                }
+            }
         }
 
         return jsonResponse({ ok: true }, 200, origin);
