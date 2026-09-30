@@ -55,7 +55,8 @@ export default {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: env.TELEGRAM_CHAT_ID,
-                text: `🔔Новый посетитель в ${sentAt}`,
+                parse_mode: 'HTML',
+                text: `<u>🔔Новый посетитель в ${sentAt}</u>`,
             }),
         });
 
