@@ -3,9 +3,39 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 // Уведомляем Telegram через серверный endpoint, не раскрывая токен бота.
 const visitorNotificationEndpoint = document.querySelector('meta[name="visitor-notification-endpoint"]')?.content;
-if (visitorNotificationEndpoint) {
-    fetch(visitorNotificationEndpoint, { method: 'POST', keepalive: true }).catch(() => {});
-}
+const notifyFirstTimeVisitor = async endpoint => {
+    if (!endpoint) return;
+
+    const notificationKey = 'visitor-notification-status-v1';
+
+    try {
+        const notificationState = localStorage.getItem(notificationKey);
+        if (notificationState === 'sent') return;
+        if (notificationState && Date.now() - Number(notificationState) < 60 * 1000) return;
+
+        localStorage.setItem(notificationKey, String(Date.now()));
+    } catch {
+        return;
+    }
+
+    try {
+        const response = await fetch(endpoint, { method: 'POST', keepalive: true });
+        if (!response.ok) {
+            localStorage.removeItem(notificationKey);
+            return;
+        }
+
+        localStorage.setItem(notificationKey, 'sent');
+    } catch {
+        try {
+            localStorage.removeItem(notificationKey);
+        } catch {
+            // Ignore storage errors so they don't create an unhandled rejection.
+        }
+    }
+};
+
+void notifyFirstTimeVisitor(visitorNotificationEndpoint);
 
 // Показываем статус, если пользователь переключился на другую вкладку.
 const pageVisibilityNotice = document.getElementById('pageVisibilityNotice');
