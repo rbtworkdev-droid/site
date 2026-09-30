@@ -1,0 +1,12 @@
+name = "site-visitor-notifier"
+main = "worker.js"
+compatibility_date = "2026-09-30"
+
+[vars]
+ALLOWED_ORIGIN = "https://rbtworkdev-droid.github.io"
+TELEGRAM_CHAT_ID = "964828492"
+
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 10, period = 60 }

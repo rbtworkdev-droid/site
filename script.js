@@ -1,6 +1,12 @@
 // Год в футере
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Уведомляем Telegram через серверный endpoint, не раскрывая токен бота.
+const visitorNotificationEndpoint = document.querySelector('meta[name="visitor-notification-endpoint"]')?.content;
+if (visitorNotificationEndpoint) {
+    fetch(visitorNotificationEndpoint, { method: 'POST', keepalive: true }).catch(() => {});
+}
+
 // Показываем статус, если пользователь переключился на другую вкладку.
 const pageVisibilityNotice = document.getElementById('pageVisibilityNotice');
 const pageVisibilityMessage = document.getElementById('pageVisibilityMessage');
