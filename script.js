@@ -3,39 +3,57 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 // Уведомляем Telegram через серверный endpoint, не раскрывая токен бота.
 const visitorNotificationEndpoint = document.querySelector('meta[name="visitor-notification-endpoint"]')?.content;
-const notifyFirstTimeVisitor = async endpoint => {
+const notifyVisitorVisit = async endpoint => {
     if (!endpoint) return;
 
-    const notificationKey = 'visitor-notification-status-v1';
+    const visitorIdKey = 'visitor-id-v1';
+    const visitStateKey = 'visitor-visit-state-v1';
+    let visitorId;
+    let visitCount;
+    let messageRef;
 
     try {
-        const notificationState = localStorage.getItem(notificationKey);
-        if (notificationState === 'sent') return;
-        if (notificationState && Date.now() - Number(notificationState) < 60 * 1000) return;
+        visitorId = localStorage.getItem(visitorIdKey);
+        if (!visitorId) {
+            visitorId = crypto.randomUUID();
+            localStorage.setItem(visitorIdKey, visitorId);
+        }
 
-        localStorage.setItem(notificationKey, String(Date.now()));
+        let visitState;
+        try {
+            visitState = JSON.parse(localStorage.getItem(visitStateKey) || 'null');
+        } catch {
+            visitState = null;
+        }
+
+        const previousCount = Number.isSafeInteger(visitState?.visitCount) && visitState.visitCount >= 0
+            ? visitState.visitCount
+            : 0;
+        visitCount = previousCount + 1;
+        messageRef = typeof visitState?.messageRef === 'string' ? visitState.messageRef : null;
     } catch {
         return;
     }
 
     try {
-        const response = await fetch(endpoint, { method: 'POST', keepalive: true });
-        if (!response.ok) {
-            localStorage.removeItem(notificationKey);
-            return;
-        }
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ visitorId, visitCount, messageRef }),
+            keepalive: true,
+        });
+        if (!response.ok) return;
 
-        localStorage.setItem(notificationKey, 'sent');
+        const result = await response.json();
+        if (!result.messageRef) return;
+
+        localStorage.setItem(visitStateKey, JSON.stringify({ visitCount, messageRef: result.messageRef }));
     } catch {
-        try {
-            localStorage.removeItem(notificationKey);
-        } catch {
-            // Ignore storage errors so they don't create an unhandled rejection.
-        }
+        // Keep the last acknowledged count and message reference for the next visit.
     }
 };
 
-void notifyFirstTimeVisitor(visitorNotificationEndpoint);
+void notifyVisitorVisit(visitorNotificationEndpoint);
 
 // Показываем статус, если пользователь переключился на другую вкладку.
 const pageVisibilityNotice = document.getElementById('pageVisibilityNotice');
