@@ -104,7 +104,7 @@ export default {
             second: '2-digit',
             hourCycle: 'h23',
         }).format(new Date(timestamp.getTime() + telegramDisplayOffsetMs));
-        const formatNotification = (timestamp, id, count) => `🔔Новый посетитель в ${formatTelegramTime(timestamp)}\nID: ${id}\nЗаходы: ${count}\n${'\u00a0'.repeat(44)}----`;
+        const formatNotification = (timestamp, id, count) => `🔔 Новый посетитель\n\nВремя: ${formatTelegramTime(timestamp)}\nID: ${id}\nКоличество визитов: ${count}`;
         const sentAt = new Date();
 
         const telegramResponse = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/${telegramMessageId ? 'editMessageText' : 'sendMessage'}`, {
