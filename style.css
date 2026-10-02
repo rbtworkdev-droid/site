@@ -1445,7 +1445,7 @@ body::-webkit-scrollbar {
 }
 
 /* Весь контент — поверх canvas */
-.header, .hero, .section, .footer {
+.hero, .section, .footer {
     position: relative;
     z-index: 1;
 }
