@@ -3,7 +3,7 @@ main = "worker.js"
 compatibility_date = "2026-09-30"
 
 [vars]
-ALLOWED_ORIGIN = "https://rbtworkdev-droid.github.io"
+ALLOWED_ORIGINS = "https://rbtworkdev-droid.github.io,https://orange-doodle-9q759xp4pgpcxw4-8000.app.github.dev"
 TELEGRAM_CHAT_ID = "964828492"
 
 [[ratelimits]]

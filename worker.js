@@ -13,7 +13,11 @@ const jsonResponse = (body, status, origin) => new Response(JSON.stringify(body)
 export default {
     async fetch(request, env) {
         const origin = request.headers.get('Origin');
-        if (origin !== env.ALLOWED_ORIGIN) {
+        const allowedOrigins = (env.ALLOWED_ORIGINS || env.ALLOWED_ORIGIN || '')
+            .split(',')
+            .map(allowedOrigin => allowedOrigin.trim())
+            .filter(Boolean);
+        if (!origin || !allowedOrigins.includes(origin)) {
             return jsonResponse({ error: 'Forbidden' }, 403);
         }
 
